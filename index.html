@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>TGEN-AI — Your AI Learning Companion</title>
+
+  <meta
+    name="description"
+    content="TGEN-AI is an AI-powered learning companion for Nigerian secondary school students."
+  />
+
+  <meta name="theme-color" content="#2563eb" />
+
+  <link rel="manifest" href="manifest.json" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <!-- =====================================================
+       TOP NAVIGATION
+  ====================================================== -->
+
+  <header class="topbar">
+    <div class="nav-container">
+
+      <button
+        class="brand"
+        onclick="showScreen('home')"
+        aria-label="Go home"
+      >
+        <div class="brand-logo">T</div>
+
+        <div class="brand-text">
+          <strong>TGEN-AI</strong>
+          <span>Learn smarter.</span>
+        </div>
+      </button>
+
+      <nav class="main-nav" aria-label="Main navigation">
+  <button type="button" onclick="showScreen('home')">Home</button>
+  <button type="button" onclick="showScreen(userProfile ? 'classes' : 'profile')">Classes</button>
+  <button type="button" onclick="showScreen('study')">AI Tutor</button>
+  <button type="button" onclick="showScreen('quiz')">Quiz</button>
+  <button type="button" onclick="showScreen('progress')">Progress</button>
+</nav>
+
+      <button
+        class="nav-dashboard-btn"
+        onclick="showScreen('dashboard')"
+      >
+        Dashboard
+      </button>
+
+    </div>
+  </header>
+
+
+  <!-- =====================================================
+       MAIN APPLICATION
+  ====================================================== -->
+
+  <main>
+
+    <!-- ===================================================
+         HOME
+    ==================================================== -->
+
+    <section id="home" class="app-screen active">
+
+      <div class="hero-section">
+
+        <div class="hero-container">
+
+          <div class="hero-content">
+
+            <div class="eyebrow">
+              <span class="status-dot"></span>
+              AI-powered learning
+            </div>
+
+            <h1>
+              Study smarter.
+              <span>Learn faster.</span>
+            </h1>
+
+            <p>
+              Meet TGEN-AI — your personal AI learning companion built
+              to make studying easier, clearer and way less stressful.
+            </p>
+
+            <div class="hero-actions">
+
+              <button
+                class="primary-btn"
+                onclick="showScreen('classes')"
+              >
+                Start Learning
+                <span>→</span>
+              </button>
+
+              <button
+                class="secondary-btn"
+                onclick="showScreen('study')"
+              >
+                Ask TGEN-AI
+              </button>
+
+            </div>
+
+            <div class="hero-trust">
+
+              <div class="trust-item">
+                <strong>6</strong>
+                <span>School levels</span>
+              </div>
+
+              <div class="trust-item">
+                <strong>AI</strong>
+                <span>Smart tutor</span>
+              </div>
+
+              <div class="trust-item">
+                <strong>24/7</strong>
+                <span>Study anytime</span>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- HERO PREVIEW -->
+
+          <div class="hero-preview">
+
+            <div class="preview-window">
+
+              <div class="preview-top">
+
+                <div class="preview-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+
+                <span class="preview-title">
+                  TGEN-AI
+                </span>
+
+                <span class="preview-status">
+                  ● Online
+                </span>
+
+              </div>
+
+
+              <div class="preview-body">
+
+                <div class="preview-sidebar">
+
+                  <div class="mini-profile">
+
+                    <div class="mini-avatar">
+                      T
+                    </div>
+
+                    <div>
+                      <strong>Student</strong>
+                      <small>Keep learning</small>
+                    </div>
+
+                  </div>
+
+                  <div class="mini-nav active">
+                    <span>⌂</span>
+                    Home
+                  </div>
+
+                  <div class="mini-nav">
+                    <span>▣</span>
+                    Classes
+                  </div>
+
+                  <div class="mini-nav">
+                    <span>✦</span>
+                    AI Tutor
+                  </div>
+
+                  <div class="mini-nav">
+                    <span>✓</span>
+                    Quizzes
+                  </div>
+
+                </div>
+
+
+                <div class="preview-main">
+
+                  <div class="preview-welcome">
+
+                    <div>
+                      <small>WELCOME BACK</small>
+
+                      <h3>
+                        Ready to learn?
+                      </h3>
+
+                      <p>
+                        Pick a subject and let's get started.
+                      </p>
+                    </div>
+
+                    <div class="preview-orb">
+                      ✦
+                    </div>
+
+                  </div>
+
+
+                  <div class="preview-stat-row">
+
+                    <div class="preview-stat">
+
+                      <span>🔥</span>
+
+                      <div>
+                        <strong id="previewStreak">0</strong>
+                        <small>Day streak</small>
+                      </div>
+
+                    </div>
+
+
+                    <div class="preview-stat">
+
+                      <span>🏆</span>
+
+                      <div>
+                        <strong id="previewScore">0</strong>
+                        <small>Points</small>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="preview-section-title">
+                    Continue learning
+                  </div>
+
+
+                  <div class="preview-topic">
+
+                    <div class="preview-topic-icon">
+                      📚
+                    </div>
+
+                    <div class="preview-topic-info">
+
+                      <strong>
+                        Choose a class
+                      </strong>
+
+                      <small>
+                        Start your learning journey
+                      </small>
+
+                      <div class="preview-progress">
+                        <span></span>
+                      </div>
+
+                    </div>
+
+                    <span class="preview-arrow">
+                      →
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- FEATURE STRIP -->
+
+      <div class="feature-strip">
+
+        <div class="feature-strip-container">
+
+          <div class="feature-item">
+
+            <div class="feature-icon">
+              ✦
+            </div>
+
+            <div>
+              <strong>AI Tutor</strong>
+              <span>Get explanations instantly</span>
+            </div>
+
+          </div>
+
+
+          <div class="feature-item">
+
+            <div class="feature-icon">
+              ◈
+            </div>
+
+            <div>
+              <strong>Smart Quizzes</strong>
+              <span>Test what you know</span>
+            </div>
+
+          </div>
+
+
+          <div class="feature-item">
+
+            <div class="feature-icon">
+              ↗
+            </div>
+
+            <div>
+              <strong>Track Progress</strong>
+              <span>See how you're improving</span>
+            </div>
+
+          </div>
+
+
+          <div class="feature-item">
+
+            <div class="feature-icon">
+              ◎
+            </div>
+
+            <div>
+              <strong>Nigerian Curriculum</strong>
+              <span>Built for your classes</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- HOW IT WORKS -->
+
+      <div class="home-content">
+
+        <div class="section-heading">
+
+          <span>HOW IT WORKS</span>
+
+          <h2>
+            Your study journey,
+            <em>simplified.</em>
+          </h2>
+
+          <p>
+            No complicated setup. Just choose, learn and improve.
+          </p>
+
+        </div>
+
+
+        <div class="steps-grid">
+
+          <div class="step-card">
+
+            <div class="step-number">
+              01
+            </div>
+
+            <div class="step-icon">
+              📚
+            </div>
+
+            <h3>
+              Choose your class
+            </h3>
+
+            <p>
+              Select your school level and find the subjects
+              you're currently studying.
+            </p>
+
+          </div>
+
+
+          <div class="step-card">
+
+            <div class="step-number">
+              02
+            </div>
+
+            <div class="step-icon">
+              ✦
+            </div>
+
+            <h3>
+              Learn with AI
+            </h3>
+
+            <p>
+              Ask questions and get simple explanations
+              designed to help you understand.
+            </p>
+
+          </div>
+
+
+          <div class="step-card">
+
+            <div class="step-number">
+              03
+            </div>
+
+            <div class="step-icon">
+              🏆
+            </div>
+
+            <h3>
+              Test yourself
+            </h3>
+
+            <p>
+              Take quizzes, earn points and keep track
+              of your learning progress.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+<!-- ===================================================
+     STUDENT PROFILE
+==================================================== -->
+
+<section id="profile" class="app-screen">
+
+  <div class="page-container">
+
+    <div class="page-header">
+      <div>
+        <span class="page-eyebrow">
+          WELCOME TO TGEN-AI
+        </span>
+
+        <h1>
+          Create your profile
+        </h1>
+
+        <p>
+          Tell TGEN-AI a little about yourself so your subjects
+          and learning experience can be personalized.
+        </p>
+      </div>
+
+      <div class="page-header-icon">
+        👤
+      </div>
+    </div>
+
+    <div style="
+      max-width:760px;
+      margin:0 auto;
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:24px;
+      padding:32px;
+      box-shadow:0 10px 30px rgba(15,23,42,.06);
+    ">
+
+      <div style="margin-bottom:24px;">
+        <label
+          for="profileName"
+          style="
+            display:block;
+            font-weight:700;
+            margin-bottom:8px;
+          "
+        >
+          Your name
+        </label>
+
+        <input
+          id="profileName"
+          type="text"
+          placeholder="Enter your name"
+          autocomplete="name"
+          style="
+            width:100%;
+            box-sizing:border-box;
+            padding:14px 16px;
+            border:1px solid #dbe3f0;
+            border-radius:12px;
+            font-size:16px;
+          "
+        />
+      </div>
+
+      <div style="margin-bottom:28px;">
+        <label
+          for="profileEmail"
+          style="
+            display:block;
+            font-weight:700;
+            margin-bottom:8px;
+          "
+        >
+          Email
+        </label>
+
+        <input
+          id="profileEmail"
+          type="email"
+          placeholder="Enter any email"
+          autocomplete="email"
+          style="
+            width:100%;
+            box-sizing:border-box;
+            padding:14px 16px;
+            border:1px solid #dbe3f0;
+            border-radius:12px;
+            font-size:16px;
+          "
+        />
+
+        <small style="
+          display:block;
+          margin-top:8px;
+          color:#64748b;
+        ">
+          No email verification is required.
+        </small>
+      </div>
+
+      <div style="margin-bottom:28px;">
+
+        <label
+          for="profileClass"
+          style="
+            display:block;
+            font-weight:700;
+            margin-bottom:8px;
+          "
+        >
+          Your class
+        </label>
+
+        <select
+          id="profileClass"
+          style="
+            width:100%;
+            box-sizing:border-box;
+            padding:14px 16px;
+            border:1px solid #dbe3f0;
+            border-radius:12px;
+            font-size:16px;
+            background:#fff;
+          "
+        >
+          <option value="">Select your class</option>
+          <option value="SS1">SS1</option>
+          <option value="SS2">SS2</option>
+          <option value="SS3">SS3</option>
+        </select>
+        <!-- DEPARTMENT -->
+<div style="margin-bottom:28px;">
+
+  <label
+    for="profileDepartment"
+    style="
+      display:block;
+      font-weight:700;
+      margin-bottom:8px;
+    "
+  >
+    Your department
+  </label>
+
+  <select
+    id="profileDepartment"
+    style="
+      width:100%;
+      box-sizing:border-box;
+      padding:14px 16px;
+      border:1px solid #dbe3f0;
+      border-radius:12px;
+      font-size:16px;
+      background:#fff;
+    "
+  >
+    <option value="">Select your department</option>
+    <option value="General">📚 General</option>
+    <option value="Science">🔬 Science</option>
+    <option value="Arts">🎨 Arts</option>
+    <option value="Commercial">💼 Commercial</option>
+  </select>
+
+</div>
+
+
+<!-- SS3 EXAM TARGET -->
+<div
+  id="examTargetWrapper"
+  style="
+    display:none;
+    margin-bottom:28px;
+  "
+>
+
+  <label
+    for="profileExam"
+    style="
+      display:block;
+      font-weight:700;
+      margin-bottom:8px;
+    "
+  >
+    What are you studying for?
+  </label>
+
+  <select
+    id="profileExam"
+    style="
+      width:100%;
+      box-sizing:border-box;
+      padding:14px 16px;
+      border:1px solid #dbe3f0;
+      border-radius:12px;
+      font-size:16px;
+      background:#fff;
+    "
+  >
+    <option value="">Select an exam</option>
+    <option value="WAEC">WAEC / WASSCE</option>
+    <option value="NECO">NECO</option>
+    <option value="JAMB">JAMB / UTME</option>
+    <option value="GCE">GCE</option>
+    <option value="SAT">SAT</option>
+    <option value="NABTEB">NABTEB</option>
+    <option value="OTHER">Other</option>
+  </select>
+
+  <small style="
+    display:block;
+    margin-top:8px;
+    color:#64748b;
+  ">
+    TGEN-AI will use this to personalize your exam preparation.
+  </small>
+
+</div>
+
+      </div>
+
+      <div>
+
+        <h3 style="margin-bottom:8px;">
+          Subjects you offer
+        </h3>
+
+        <p style="
+          color:#64748b;
+          margin-bottom:20px;
+        ">
+          Select every subject you currently offer.
+        </p>
+
+        <div
+          id="profileSubjects"
+          style="
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:10px;
+          "
+        >
+          <p style="color:#64748b;">
+            Select your class first.
+          </p>
+        </div>
+
+      </div>
+
+      <div
+        id="profileError"
+        style="
+          display:none;
+          margin-top:20px;
+          padding:12px 14px;
+          border-radius:10px;
+          background:#fef2f2;
+          color:#b91c1c;
+          font-weight:600;
+        "
+      ></div>
+
+      <button
+        id="saveProfileBtn"
+        class="primary-btn"
+        type="button"
+        style="
+          width:100%;
+          margin-top:28px;
+        "
+      >
+        Create Profile
+        <span>→</span>
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+    <!-- ===================================================
+         CLASSES
+    ==================================================== -->
+
+    <section id="classes" class="app-screen">
+
+      <div class="page-container">
+
+        <div class="page-header">
+
+          <div>
+
+            <span class="page-eyebrow">
+              STEP 1
+            </span>
+
+            <h1>
+              Choose your class
+            </h1>
+
+            <p>
+              Select your current school level to continue.
+            </p>
+
+          </div>
+
+          <div class="page-header-icon">
+            📚
+          </div>
+
+        </div>
+
+
+        <div
+          id="classGrid"
+          class="card-grid class-grid"
+        >
+          <!-- JavaScript loads classes -->
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         SUBJECTS
+    ==================================================== -->
+
+    <section id="subjects" class="app-screen">
+
+      <div class="page-container">
+
+        <div class="page-header">
+
+          <div>
+
+            <button
+              class="back-btn"
+              onclick="showScreen('classes')"
+            >
+              ← Back to classes
+            </button>
+
+            <span class="page-eyebrow">
+              STEP 2
+            </span>
+
+            <h1 id="subjectTitle">
+              Choose a subject
+            </h1>
+
+            <p>
+              Pick a subject you want to study.
+            </p>
+
+          </div>
+
+
+          <button
+            id="changeClassBtn"
+            class="outline-btn"
+            onclick="showScreen('classes')"
+          >
+            Change class
+          </button>
+
+        </div>
+
+
+        <div
+          id="subjectGrid"
+          class="card-grid subject-grid"
+        >
+          <!-- JavaScript loads subjects -->
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         TOPICS
+    ==================================================== -->
+
+    <section id="topics" class="app-screen">
+
+      <div class="page-container">
+
+        <div class="page-header">
+
+          <div>
+
+            <button
+              class="back-btn"
+              onclick="showScreen('subjects')"
+            >
+              ← Back to subjects
+            </button>
+
+            <span class="page-eyebrow">
+              STEP 3
+            </span>
+
+            <h1 id="topicTitle">
+              Choose a topic
+            </h1>
+
+            <p>
+              Select a topic and start learning.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="topicGrid"
+          class="card-grid topic-grid"
+        >
+          <!-- JavaScript loads topics -->
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         AI TUTOR / STUDY
+    ==================================================== -->
+
+    <section id="study" class="app-screen">
+
+      <div class="study-container">
+
+        <div class="study-header">
+
+          <div>
+
+            <button
+              class="back-btn"
+              onclick="showScreen('topics')"
+            >
+              ← Back to topics
+            </button>
+
+
+            <div class="study-title-row">
+
+              <div class="study-title-icon">
+                ✦
+              </div>
+
+              <div>
+
+                <span class="page-eyebrow">
+                  AI TUTOR
+                </span>
+
+                <h1 id="studyTitle">
+                  TGEN-AI Tutor
+                </h1>
+
+                <span
+                  id="selectedTopicBadge"
+                  class="topic-badge"
+                >
+                  Choose a topic
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <button
+            id="showTopicsBtn"
+            class="outline-btn"
+            onclick="showScreen('topics')"
+          >
+            Browse topics
+          </button>
+
+        </div>
+
+
+        <div class="chat-wrapper">
+
+          <div class="chat-topbar">
+
+            <div class="chat-ai-info">
+
+              <div class="ai-avatar">
+                ✦
+              </div>
+
+              <div>
+
+                <strong>
+                  TGEN-AI
+                </strong>
+
+                <span>
+                  Your personal study assistant
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="online-indicator">
+
+              <span></span>
+
+              Ready
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="chatArea"
+            class="chat-area"
+          >
+
+            <div
+              id="topicNameEmpty"
+              class="empty-chat"
+            >
+
+              <div class="empty-chat-icon">
+                ✦
+              </div>
+
+              <h2>
+                What do you want to learn?
+              </h2>
+
+              <p>
+                Ask TGEN-AI a question and get a
+                clear explanation to help you understand.
+              </p>
+
+
+              <div class="suggestion-chips">
+
+                <button
+                  onclick="setQuestion('Explain this topic to me simply')"
+                >
+                  Explain this simply
+                </button>
+
+                <button
+                  onclick="setQuestion('Give me an example')"
+                >
+                  Give me an example
+                </button>
+
+                <button
+                  onclick="setQuestion('Test me on this topic')"
+                >
+                  Test me
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="chat-input-area">
+
+            <textarea
+              id="questionInput"
+              rows="2"
+              placeholder="Ask TGEN-AI anything about your topic..."
+            ></textarea>
+
+
+            <div class="chat-input-bottom">
+
+              <span class="input-hint">
+                Press Enter to ask
+              </span>
+
+
+              <div class="input-actions">
+
+                <button
+                  id="clearQuestionBtn"
+                  class="icon-btn"
+                  title="Clear"
+                  aria-label="Clear question"
+                >
+                  ×
+                </button>
+
+                <button
+                  id="generateStudyBtn"
+                  class="send-btn"
+                >
+                  Ask TGEN-AI
+                  <span>→</span>
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="study-quick-actions">
+
+          <button onclick="showScreen('quiz')">
+            <span>✓</span>
+            Take a quiz
+          </button>
+
+          <button onclick="showScreen('progress')">
+            <span>↗</span>
+            View progress
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         QUIZ
+    ==================================================== -->
+
+    <section id="quiz" class="app-screen">
+
+      <div class="quiz-container">
+
+        <div class="quiz-header">
+
+          <div>
+
+            <button
+              class="back-btn"
+              onclick="showScreen('study')"
+            >
+              ← Back to study
+            </button>
+
+            <span class="page-eyebrow">
+              KNOWLEDGE CHECK
+            </span>
+
+            <h1 id="quizHeader">
+              Test your knowledge
+            </h1>
+
+            <p>
+              Choose the best answer for each question.
+            </p>
+
+          </div>
+
+
+          <div class="quiz-counter">
+
+            <strong id="questionCounter">
+              Quiz not started
+            </strong>
+
+            <span>
+              Answer every question
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ONLY ONE GENERATE BUTTON -->
+
+        <div
+          id="quizGenerateArea"
+          class="quiz-generate-area"
+        >
+
+          <button
+            id="generateQuizBtn"
+            class="primary-btn"
+            type="button"
+          >
+            <span>✦</span>
+            Generate Quiz
+          </button>
+
+          <p>
+            Generate a quiz based on your selected class and subject.
+          </p>
+
+        </div>
+
+
+        <div class="quiz-layout">
+
+          <div class="quiz-main">
+
+            <div
+              id="quizList"
+              class="quiz-list"
+            >
+              <!-- JavaScript loads quiz questions -->
+            </div>
+
+
+            <div class="quiz-actions">
+
+              <button
+                id="submitQuizBtn"
+                class="primary-btn"
+                type="button"
+                style="display:none;"
+              >
+                Submit Quiz
+                <span>→</span>
+              </button>
+
+
+              <button
+                id="quizNextBtn"
+                class="secondary-btn"
+                type="button"
+                style="display:none;"
+              >
+                Continue
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <aside class="quiz-side-card">
+
+            <div class="quiz-side-icon">
+              🧠
+            </div>
+
+            <h3>
+              Quiz tip
+            </h3>
+
+            <p>
+              Don't rush. Read every question carefully
+              before choosing your answer.
+            </p>
+
+            <div class="quiz-side-divider"></div>
+
+
+            <div class="quiz-mini-stat">
+
+              <span>
+                Current score
+              </span>
+
+              <strong id="quizSideScore">
+                0
+              </strong>
+
+            </div>
+
+          </aside>
+
+        </div>
+
+
+        <div
+          id="quizResult"
+          class="quiz-result"
+          style="display:none;"
+        >
+          <!-- Result appears here -->
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         PROGRESS
+    ==================================================== -->
+
+    <section id="progress" class="app-screen">
+
+      <div class="page-container">
+
+        <div class="page-header">
+
+          <div>
+
+            <span class="page-eyebrow">
+              YOUR JOURNEY
+            </span>
+
+            <h1>
+              Your progress
+            </h1>
+
+            <p>
+              Keep learning and watch your progress grow.
+            </p>
+
+          </div>
+
+
+          <div class="progress-header-icon">
+            ↗
+          </div>
+
+        </div>
+
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+
+            <div class="stat-icon">
+              🔥
+            </div>
+
+            <div>
+
+              <span>
+                Study streak
+              </span>
+
+              <strong id="streakValue">
+                0
+              </strong>
+
+              <small>
+                days
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">
+              🏆
+            </div>
+
+            <div>
+
+              <span>
+                Total score
+              </span>
+
+              <strong id="scoreValue">
+                0
+              </strong>
+
+              <small>
+                points
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="stat-icon">
+              📖
+            </div>
+
+            <div>
+
+              <span>
+                Topics covered
+              </span>
+
+              <strong id="topicsCoveredValue">
+                0
+              </strong>
+
+              <small>
+                topics
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="progress-content-grid">
+
+          <div class="progress-card">
+
+            <div class="card-heading">
+
+              <div>
+
+                <span class="page-eyebrow">
+                  KEEP IT UP
+                </span>
+
+                <h2>
+                  Learning progress
+                </h2>
+
+              </div>
+
+              <span class="progress-percent">
+                0%
+              </span>
+
+            </div>
+
+
+            <div class="big-progress">
+              <span style="width:0%;"></span>
+            </div>
+
+
+            <p>
+              Start studying topics and taking quizzes
+              to build your progress.
+            </p>
+
+          </div>
+
+
+          <div class="progress-card">
+
+            <div class="card-heading">
+
+              <div>
+
+                <span class="page-eyebrow">
+                  NEXT STEP
+                </span>
+
+                <h2>
+                  Keep learning
+                </h2>
+
+              </div>
+
+              <span class="card-heading-icon">
+                ✦
+              </span>
+
+            </div>
+
+
+            <p>
+              Choose another topic and keep your
+              learning streak alive.
+            </p>
+
+
+            <button
+              class="primary-btn small-btn"
+              onclick="showScreen('classes')"
+            >
+              Study now
+              <span>→</span>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         DASHBOARD
+    ==================================================== -->
+
+    <section id="dashboard" class="app-screen">
+
+      <div class="page-container">
+
+        <div class="dashboard-heading">
+
+          <div>
+
+            <span class="page-eyebrow">
+              TGEN-AI
+            </span>
+
+            <h1>
+              Your learning dashboard
+            </h1>
+
+            <p>
+              Everything you need to stay on track.
+            </p>
+
+          </div>
+
+
+          <button
+            class="primary-btn"
+            onclick="showScreen('classes')"
+          >
+            Start studying
+            <span>→</span>
+          </button>
+
+        </div>
+
+
+        <div class="dashboard-grid">
+
+          <div class="dashboard-main-card">
+
+            <div class="dashboard-welcome">
+
+              <div>
+
+                <span>
+                  READY WHEN YOU ARE
+                </span>
+
+                <h2>
+                  Let's make today
+                  <br />
+                  a productive one.
+                </h2>
+
+                <p>
+                  Learn something new, test yourself,
+                  and keep moving forward.
+                </p>
+
+              </div>
+
+
+              <div class="dashboard-orb">
+                ✦
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="dashboard-stat-card">
+
+            <div class="dashboard-card-icon">
+              🔥
+            </div>
+
+            <span>
+              Current streak
+            </span>
+
+            <strong id="dashboardStreak">
+              0
+            </strong>
+
+            <small>
+              days
+            </small>
+
+          </div>
+
+
+          <div class="dashboard-stat-card">
+
+            <div class="dashboard-card-icon">
+              🏆
+            </div>
+
+            <span>
+              Total points
+            </span>
+
+            <strong id="dashboardScore">
+              0
+            </strong>
+
+            <small>
+              points earned
+            </small>
+
+          </div>
+
+
+          <div class="dashboard-stat-card">
+
+            <div class="dashboard-card-icon">
+              📚
+            </div>
+
+            <span>
+              Topics covered
+            </span>
+
+            <strong id="dashboardTopics">
+              0
+            </strong>
+
+            <small>
+              topics studied
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="dashboard-actions">
+
+          <button onclick="showScreen('classes')">
+
+            <div>
+              📚
+            </div>
+
+            <span>
+              <strong>
+                Browse classes
+              </strong>
+              Choose your school level
+            </span>
+
+            <b>
+              →
+            </b>
+
+          </button>
+
+
+          <button onclick="showScreen('study')">
+
+            <div>
+              ✦
+            </div>
+
+            <span>
+              <strong>
+                Open AI Tutor
+              </strong>
+              Ask a study question
+            </span>
+
+            <b>
+              →
+            </b>
+
+          </button>
+
+
+          <button onclick="showScreen('quiz')">
+
+            <div>
+              ✓
+            </div>
+
+            <span>
+              <strong>
+                Take a quiz
+              </strong>
+              Test your knowledge
+            </span>
+
+            <b>
+              →
+            </b>
+
+          </button>
+
+
+          <button onclick="showScreen('progress')">
+
+            <div>
+              ↗
+            </div>
+
+            <span>
+              <strong>
+                View progress
+              </strong>
+              Check your learning stats
+            </span>
+
+            <b>
+              →
+            </b>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+
+  <footer class="site-footer">
+
+    <div class="footer-container">
+
+      <div class="footer-brand">
+
+        <div class="brand-logo">
+          T
+        </div>
+
+        <div>
+          <strong>
+            TGEN-AI
+          </strong>
+
+          <span>
+            Learn smarter. Go further.
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="footer-links">
+
+        <button onclick="showScreen('home')">
+          Home
+        </button>
+
+        <button onclick="showScreen('classes')">
+          Classes
+        </button>
+
+        <button onclick="showScreen('study')">
+          AI Tutor
+        </button>
+
+        <button onclick="showScreen('quiz')">
+          Quiz
+        </button>
+
+      </div>
+
+
+      <p>
+        © 2026 TGEN-AI. Built for smarter learning.
+      </p>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =====================================================
+       APP SCRIPTS
+  ====================================================== -->
+
+  <script src="curriculum.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>

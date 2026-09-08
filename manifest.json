@@ -1,0 +1,11 @@
+{
+  "name": "TGEN-AI",
+  "short_name": "TGEN-AI",
+  "description": "Your AI-powered Nigerian secondary school learning app.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#eff6ff",
+  "theme_color": "#2e6fe8",
+  "orientation": "portrait-primary",
+  "icons": []
+}

@@ -1,0 +1,866 @@
+const classData = {
+  SS1: {
+    label: "SS1 / Year 10",
+    description: "Build a strong foundation across core and elective subjects.",
+    subjects: [
+      {
+        name: "Mathematics",
+        icon: "📐",
+        topics: 4,
+        badge: "Core",
+        topicList: [
+          { name: "Algebra Basics", difficulty: "Beginner", time: "15 min", tips: "Learn how to simplify expressions and solve simple equations step by step." },
+          { name: "Fractions and Decimals", difficulty: "Beginner", time: "20 min", tips: "Convert between fractions, decimals, and percentages with practice." },
+          { name: "Angles and Shapes", difficulty: "Intermediate", time: "18 min", tips: "Know the properties of triangles, quadrilaterals, and straight lines." },
+          { name: "Simple Statistics", difficulty: "Intermediate", time: "15 min", tips: "Use mean, median, and mode to understand data sets." }
+        ]
+      },
+      {
+        name: "English",
+        icon: "📚",
+        topics: 4,
+        badge: "Language",
+        topicList: [
+          { name: "Essay Writing", difficulty: "Beginner", time: "18 min", tips: "Use a clear introduction, body, and conclusion for your paragraph or essay." },
+          { name: "Grammar Rules", difficulty: "Beginner", time: "14 min", tips: "Focus on tenses, subject-verb agreement, and punctuation." },
+          { name: "Comprehension", difficulty: "Intermediate", time: "16 min", tips: "Underline keywords, find the main idea, and answer in full sentences." },
+          { name: "Speech and Oral Work", difficulty: "Intermediate", time: "15 min", tips: "Practice speaking clearly and using good vocabulary in a structured way." }
+        ]
+      },
+      {
+        name: "Biology",
+        icon: "🧬",
+        topics: 4,
+        badge: "Science",
+        topicList: [
+          { name: "Cells", difficulty: "Beginner", time: "20 min", tips: "Study the parts of a plant cell and animal cell and their functions." },
+          { name: "Living Things", difficulty: "Beginner", time: "15 min", tips: "Identify characteristics of living organisms and their basic needs." },
+          { name: "Food Chains", difficulty: "Intermediate", time: "18 min", tips: "Trace energy movement from producers to consumers and decomposers." },
+          { name: "Plants", difficulty: "Intermediate", time: "17 min", tips: "Learn the major parts of plants and how they help in survival." }
+        ]
+      },
+      {
+        name: "Chemistry",
+        icon: "🧪",
+        topics: 4,
+        badge: "Science",
+        topicList: [
+          { name: "States of Matter", difficulty: "Beginner", time: "15 min", tips: "Compare solid, liquid, and gas using shape and movement of particles." },
+          { name: "Atoms", difficulty: "Beginner", time: "16 min", tips: "Know the parts of an atom and how elements are arranged." },
+          { name: "Acids and Bases", difficulty: "Intermediate", time: "18 min", tips: "Learn how they differ and where they are used in daily life." },
+          { name: "Mixtures", difficulty: "Intermediate", time: "14 min", tips: "Know the difference between mixtures and compounds with examples." }
+        ]
+      }
+    ]
+  },
+  SS2: {
+    label: "SS2 / Year 11",
+    description: "Strengthen your understanding and prepare for key exams.",
+    subjects: [
+      {
+        name: "Mathematics",
+        icon: "📐",
+        topics: 4,
+        badge: "Core",
+        topicList: [
+          { name: "Equations", difficulty: "Beginner", time: "18 min", tips: "Balance both sides of the equation and isolate the variable." },
+          { name: "Quadratic Expressions", difficulty: "Intermediate", time: "20 min", tips: "Factorising helps you solve many quadratic equations quickly." },
+          { name: "Graphs", difficulty: "Intermediate", time: "22 min", tips: "Plot points carefully and read the slope or intercepts." },
+          { name: "Trigonometry", difficulty: "Advanced", time: "25 min", tips: "Know SOHCAHTOA and practice with right-angled triangles." }
+        ]
+      },
+      {
+        name: "Biology",
+        icon: "🧬",
+        topics: 4,
+        badge: "Science",
+        topicList: [
+          { name: "Digestive System", difficulty: "Beginner", time: "18 min", tips: "Follow the path of food and the role of enzymes." },
+          { name: "Respiration", difficulty: "Intermediate", time: "20 min", tips: "Differentiate between aerobic and anaerobic respiration." },
+          { name: "Genetics", difficulty: "Intermediate", time: "22 min", tips: "Study dominant and recessive traits with simple Punnett squares." },
+          { name: "Ecology", difficulty: "Intermediate", time: "19 min", tips: "Understand habitats, food webs, and how organisms depend on each other." }
+        ]
+      },
+      {
+        name: "English",
+        icon: "📚",
+        topics: 4,
+        badge: "Language",
+        topicList: [
+          { name: "Literary Devices", difficulty: "Intermediate", time: "18 min", tips: "Look for metaphors, similes, personification, and repetition in texts." },
+          { name: "Summary Writing", difficulty: "Beginner", time: "16 min", tips: "Keep only the main ideas and leave out small details." },
+          { name: "Letter Writing", difficulty: "Beginner", time: "17 min", tips: "Write with a clear format: address, salutation, body, closing." },
+          { name: "Debate Skills", difficulty: "Intermediate", time: "20 min", tips: "Use short arguments, examples, and speaking confidence." }
+        ]
+      },
+      {
+        name: "Civic Education",
+        icon: "🤝",
+        topics: 4,
+        badge: "Social",
+        topicList: [
+          { name: "Rights and Duties", difficulty: "Beginner", time: "15 min", tips: "A right is something you are entitled to, while a duty is your responsibility." },
+          { name: "Government Structure", difficulty: "Intermediate", time: "20 min", tips: "Learn the roles of the executive, legislature, and judiciary." },
+          { name: "Citizenship", difficulty: "Intermediate", time: "18 min", tips: "Study how citizens contribute to peace, law, and national development." },
+          { name: "National Identity", difficulty: "Beginner", time: "14 min", tips: "Look at symbols, values, and culture that unite a country." }
+        ]
+      }
+    ]
+  },
+  SS3: {
+    label: "SS3 / Year 12",
+    description: "Focus on revision, exam practice, and final-year confidence.",
+    subjects: [
+      {
+        name: "Mathematics",
+        icon: "📐",
+        topics: 4,
+        badge: "Core",
+        topicList: [
+          { name: "Probability", difficulty: "Intermediate", time: "20 min", tips: "Start with outcomes and count equally likely possibilities." },
+          { name: "Vectors", difficulty: "Advanced", time: "22 min", tips: "Use direction and magnitude to explain movement in a plane." },
+          { name: "Coordinate Geometry", difficulty: "Intermediate", time: "20 min", tips: "Plot points to find slopes, midpoints, and distances." },
+          { name: "Exam Revision", difficulty: "Advanced", time: "25 min", tips: "Solve past questions in sections and review mistakes carefully." }
+        ]
+      },
+      {
+        name: "Biology",
+        icon: "🧬",
+        topics: 4,
+        badge: "Science",
+        topicList: [
+          { name: "Evolution", difficulty: "Intermediate", time: "18 min", tips: "Study how organisms change over time to survive better." },
+          { name: "Human Reproduction", difficulty: "Intermediate", time: "20 min", tips: "Understand the main stages and the roles of reproductive organs." },
+          { name: "Plant Nutrition", difficulty: "Beginner", time: "17 min", tips: "Learn how plants make food and what they need from the environment." },
+          { name: "Variation", difficulty: "Intermediate", time: "18 min", tips: "Know the difference between inherited and environmental variation." }
+        ]
+      },
+      {
+        name: "English",
+        icon: "📚",
+        topics: 4,
+        badge: "Language",
+        topicList: [
+          { name: "Comprehensive Revision", difficulty: "Intermediate", time: "16 min", tips: "Review grammar, summary writing, and reading understanding together." },
+          { name: "Argumentative Essay", difficulty: "Advanced", time: "22 min", tips: "Give clear points, examples, and a strong conclusion." },
+          { name: "Oral Reading", difficulty: "Intermediate", time: "15 min", tips: "Pause where needed and use voice variations to express meaning." },
+          { name: "Exam Practice", difficulty: "Advanced", time: "25 min", tips: "Set time limits and answer each question directly." }
+        ]
+      },
+      {
+        name: "Government",
+        icon: "🏛️",
+        topics: 4,
+        badge: "Social",
+        topicList: [
+          { name: "Electoral System", difficulty: "Intermediate", time: "17 min", tips: "Learn how voting works and why elections matter." },
+          { name: "Constitution", difficulty: "Intermediate", time: "19 min", tips: "A constitution is the rulebook guiding how a country is governed." },
+          { name: "Political Parties", difficulty: "Beginner", time: "15 min", tips: "Know their role in representation, campaigns, and policy." },
+          { name: "Public Administration", difficulty: "Intermediate", time: "20 min", tips: "Study how government services and offices are managed for the public." }
+        ]
+      }
+    ]
+  }
+};
+
+const classOrder = ["SS1", "SS2", "SS3"];
+let selectedClass = "SS1";
+let selectedSubject = classData.SS1.subjects[0].name;
+let selectedTopic = classData.SS1.subjects[0].topicList[0].name;
+
+const classGrid = document.getElementById("classGrid");
+const subjectGrid = document.getElementById("subjectGrid");
+const subjectTitle = document.getElementById("subjectTitle");
+const topicGrid = document.getElementById("topicGrid");
+const topicTitle = document.getElementById("topicTitle");
+const studyTitle = document.getElementById("studyTitle");
+const selectedTopicBadge = document.getElementById("selectedTopicBadge");
+const questionInput = document.getElementById("questionInput");
+const studyOutput = document.getElementById("studyOutput");
+const changeClassBtn = document.getElementById("changeClassBtn");
+const backToSubjectsBtn = document.getElementById("backToSubjectsBtn");
+const showTopicsBtn = document.getElementById("showTopicsBtn");
+const generateStudyBtn = document.getElementById("generateStudyBtn");
+const clearQuestionBtn = document.getElementById("clearQuestionBtn");
+const quizList = document.getElementById("quizList");
+const submitQuizBtn = document.getElementById("submitQuizBtn");
+const quizResult = document.getElementById("quizResult");
+const quizNextBtn = document.getElementById("quizNextBtn");
+
+const quizBank = {
+  SS1: {
+    Mathematics: [
+      { question: "Solve: 3x + 5 = 17", options: ["x = 2", "x = 3", "x = 4", "x = 5"], answer: "x = 4" },
+      { question: "What is 1/2 + 1/4?", options: ["3/4", "2/4", "1/3", "1/2"], answer: "3/4" },
+      { question: "A triangle has 3 sides. True or false?", options: ["True", "False"], answer: "True" }
+    ],
+    Biology: [
+      { question: "Which part of the cell controls the activities of the cell?", options: ["Cell wall", "Nucleus", "Cytoplasm", "Membrane"], answer: "Nucleus" },
+      { question: "What is the main source of energy in a food chain?", options: ["Consumer", "Producer", "Predator", "Decomposer"], answer: "Producer" },
+      { question: "Plants make food through a process called photosynthesis. True or false?", options: ["True", "False"], answer: "True" }
+    ]
+  },
+  SS2: {
+    Mathematics: [
+      { question: "Solve: x^2 - 9 = 0", options: ["x = 3", "x = 9", "x = ±3", "x = 0"], answer: "x = ±3" },
+      { question: "What is the gradient of the line y = 2x + 3?", options: ["2", "3", "-2", "0"], answer: "2" },
+      { question: "The sum of angles in a triangle is 180°. True or false?", options: ["True", "False"], answer: "True" }
+    ],
+    Biology: [
+      { question: "Which organ breaks down food mechanically and chemically?", options: ["Lungs", "Stomach", "Kidney", "Heart"], answer: "Stomach" },
+      { question: "Respiration is the process of getting energy from food. True or false?", options: ["True", "False"], answer: "True" },
+      { question: "Which is an example of a producer in an ecosystem?", options: ["Grass", "Lion", "Snake", "Bird"], answer: "Grass" }
+    ]
+  },
+  SS3: {
+    Mathematics: [
+      { question: "What is the probability of getting a head when tossing a fair coin once?", options: ["1/2", "1/4", "1/3", "1"], answer: "1/2" },
+      { question: "The coordinates (2, 3) lie on the line y = x + 1. True or false?", options: ["True", "False"], answer: "True" },
+      { question: "A vector has both magnitude and direction. True or false?", options: ["True", "False"], answer: "True" }
+    ],
+    Biology: [
+      { question: "Variation caused by environment is called acquired variation. True or false?", options: ["True", "False"], answer: "True" },
+      { question: "Which process explains how living things change over time to survive better?", options: ["Mutation", "Evolution", "Photosynthesis", "Digestion"], answer: "Evolution" },
+      { question: "Plant nutrition involves the process of making food. True or false?", options: ["True", "False"], answer: "True" }
+    ]
+  }
+};
+
+const progressState = {
+  SS1: { streak: "8 days", score: "81%", topics: 12 },
+  SS2: { streak: "11 days", score: "84%", topics: 15 },
+  SS3: { streak: "14 days", score: "88%", topics: 18 }
+};
+
+// Knowledge base for smart study responses
+const studyKnowledgeBase = {
+  "Algebra Basics": {
+    definition: "Algebra is the branch of mathematics that uses letters (variables) to represent unknown numbers. It helps us solve problems by writing them as equations.",
+    howTo: "To solve algebra equations, follow these steps: 1) Identify what you're solving for (the variable). 2) Move all terms with the variable to one side. 3) Move numbers to the other side. 4) Simplify and solve.",
+    example: "Example: If 3x + 5 = 17, first subtract 5 from both sides to get 3x = 12. Then divide both sides by 3 to get x = 4. Always check: 3(4) + 5 = 12 + 5 = 17 ✓",
+    tips: "Learn how to simplify expressions and solve simple equations step by step.",
+    difficulty: "Start with simple one-step equations before moving to two-step equations."
+  },
+  "Fractions and Decimals": {
+    definition: "Fractions represent parts of a whole (like 1/4 of a pizza), while decimals show the same idea using a point (0.25).",
+    howTo: "To add fractions: find a common denominator, add the numerators, keep the denominator. To convert to decimal: divide the numerator by denominator.",
+    example: "1/2 + 1/4: Common denominator is 4, so 2/4 + 1/4 = 3/4. As a decimal: 1/2 = 0.5 and 1/4 = 0.25, so 0.5 + 0.25 = 0.75",
+    tips: "Convert between fractions, decimals, and percentages with practice.",
+    difficulty: "Always find the greatest common factor to simplify your answers."
+  },
+  "Angles and Shapes": {
+    definition: "Angles are measured in degrees (°). Shapes have properties like angles, sides, and symmetry. A triangle has 3 sides and angles that sum to 180°.",
+    howTo: "To find missing angles: 1) Add the known angles. 2) Subtract from 180° (for triangles) or 360° (for quadrilaterals). Properties help: equilateral triangles have equal angles.",
+    example: "In a triangle with angles 60° and 70°, the third angle is 180° - 60° - 70° = 50°. A square has 4 equal 90° angles.",
+    tips: "Know the properties of triangles, quadrilaterals, and straight lines.",
+    difficulty: "Vertically opposite angles are equal. Angles on a straight line sum to 180°."
+  },
+  "Simple Statistics": {
+    definition: "Statistics helps us understand data. Mean is the average, median is the middle value, mode is the most common value.",
+    howTo: "Mean: Add all numbers and divide by how many there are. Median: Arrange in order and find the middle. Mode: Count which number appears most.",
+    example: "Scores: 5, 7, 8, 8, 10. Mean = (5+7+8+8+10)/5 = 38/5 = 7.6. Median = 8 (middle). Mode = 8 (appears twice).",
+    tips: "Use mean, median, and mode to understand data sets.",
+    difficulty: "Mean is affected by very large or very small numbers. Median is more balanced."
+  },
+  "Cells": {
+    definition: "A cell is the basic unit of life. All living things are made of cells. Plant and animal cells have a nucleus and cytoplasm, but plant cells also have a cell wall.",
+    howTo: "To study cells: 1) Use a microscope to observe them. 2) Draw diagrams labeling each part. 3) Learn the function of each organelle.",
+    example: "In a plant cell, the nucleus controls what the cell does, the cytoplasm contains water and organelles, and the cell wall provides structure. In an animal cell, there's no cell wall.",
+    tips: "Study the parts of a plant cell and animal cell and their functions.",
+    difficulty: "Remember: Plant cells have cell wall + chloroplast, animal cells don't."
+  },
+  "Living Things": {
+    definition: "Living organisms have characteristics: they grow, reproduce, respond to their environment, use energy, and maintain stability.",
+    howTo: "To identify living things: Check if it moves, grows, needs food, responds to light/heat, and can reproduce.",
+    example: "Plants are living (they grow, respond to light). Rocks are not living (they don't grow or reproduce).",
+    tips: "Identify characteristics of living organisms and their basic needs.",
+    difficulty: "All living things need energy, water, and appropriate temperature."
+  },
+  "Food Chains": {
+    definition: "A food chain shows how energy flows through nature. It starts with a producer (plant) and moves through consumers (animals) to decomposers.",
+    howTo: "To trace a food chain: 1) Start with the producer (plant/sun). 2) Add herbivores that eat plants. 3) Add carnivores that eat herbivores. 4) Show decomposers that break down dead matter.",
+    example: "Sun → Grass → Rabbit → Fox → Decomposer. Energy moves from the sun through each organism.",
+    tips: "Trace energy movement from producers to consumers and decomposers.",
+    difficulty: "Producers make their own food. Consumers eat other organisms."
+  },
+  "Plants": {
+    definition: "Plants have roots (absorb water), stems (transport water and nutrients), leaves (make food via photosynthesis), and flowers/seeds (reproduction).",
+    howTo: "Plant parts work together: Roots absorb water → Stems transport it → Leaves catch sunlight → Plant makes food for energy and growth.",
+    example: "A rose plant: roots drink water from soil, stem carries it up, green leaves make food from sunlight, flower attracts bees for pollination.",
+    tips: "Learn the major parts of plants and how they help in survival.",
+    difficulty: "Photosynthesis: Water + Sunlight + Carbon Dioxide = Glucose + Oxygen"
+  },
+  "States of Matter": {
+    definition: "Matter exists in three states: Solid (fixed shape, hard), Liquid (takes container shape, flows), Gas (fills all space, invisible).",
+    howTo: "Solids keep their shape. Liquids flow and take the shape of their container. Gases spread out and fill whatever space they're in.",
+    example: "Ice is solid (fixed shape). Water is liquid (takes cup shape). Steam is gas (spreads out as mist).",
+    tips: "Compare solid, liquid, and gas using shape and movement of particles.",
+    difficulty: "Heating changes: Solid → Liquid → Gas. Cooling reverses it."
+  },
+  "Atoms": {
+    definition: "An atom is the smallest unit of an element. It has a nucleus (protons + neutrons) and electrons orbiting it.",
+    howTo: "Atoms join together to make molecules. Understanding atoms helps you understand chemicals and reactions.",
+    example: "Oxygen atom: 8 protons, 8 neutrons, 8 electrons. Two oxygen atoms join to make O₂ (oxygen gas we breathe).",
+    tips: "Know the parts of an atom and how elements are arranged.",
+    difficulty: "Protons are positive, electrons are negative, neutrons are neutral."
+  },
+  "Acids and Bases": {
+    definition: "Acids are sour and have a pH below 7 (like lemon juice). Bases are bitter and have pH above 7 (like soap). pH 7 is neutral.",
+    howTo: "Test with pH paper: Red/pink = acid. Blue/green = base. Yellow-green = neutral. Acids + Bases = Neutral salt + Water.",
+    example: "Lemon juice is acidic (sour). Baking soda is basic. Mix them and they fizz - a chemical reaction!",
+    tips: "Learn how they differ and where they are used in daily life.",
+    difficulty: "Never taste or touch strong acids/bases - they're dangerous!"
+  },
+  "Mixtures": {
+    definition: "A mixture is when two or more substances blend but keep their own properties. A compound is when atoms join chemically and form something new.",
+    howTo: "Mixture: You can separate salt from saltwater by evaporating. Compound: You can't easily separate hydrogen from oxygen in water.",
+    example: "Saltwater is a mixture (salt + water stay themselves). Table salt is a compound (sodium + chlorine bonded).",
+    tips: "Know the difference between mixtures and compounds with examples.",
+    difficulty: "Mixtures can be separated by physical methods. Compounds need chemical reactions to separate."
+  },
+  "Equations": {
+    definition: "An equation is a mathematical statement that two things are equal, with an equals sign (=). Solving means finding what the variable equals.",
+    howTo: "Use the balance method: whatever you do to one side, do to the other side. Subtract, add, multiply, or divide to isolate the variable.",
+    example: "2x + 6 = 14. Subtract 6: 2x = 8. Divide by 2: x = 4.",
+    tips: "Balance both sides of the equation and isolate the variable.",
+    difficulty: "Check your answer by substituting back into the original equation."
+  },
+  "Quadratic Expressions": {
+    definition: "A quadratic expression has a squared term, like x². Factorizing means breaking it into simpler parts: x² - 9 = (x-3)(x+3).",
+    howTo: "Look for patterns: x² + 2ax + a² = (x+a)². For ax² + bx + c, find factors that multiply to ac and add to b.",
+    example: "x² + 5x + 6 = (x+2)(x+3) because 2×3=6 and 2+3=5.",
+    tips: "Factorising helps you solve many quadratic equations quickly.",
+    difficulty: "Always check your factorization by multiplying back out."
+  },
+  "Graphs": {
+    definition: "A graph shows relationships between two variables. Slope tells you how steep the line is. Y-intercept is where it crosses the y-axis.",
+    howTo: "Plot points (x, y) carefully. Connect them to see the pattern. Slope = rise/run. Y-intercept is where x=0.",
+    example: "y = 2x + 3 has slope 2 (rises 2 for every 1 across) and y-intercept 3 (crosses at 3).",
+    tips: "Plot points carefully and read the slope or intercepts.",
+    difficulty: "Positive slope goes up. Negative slope goes down. Steeper = bigger slope."
+  },
+  "Trigonometry": {
+    definition: "Trigonometry uses angles and sides of triangles. SOHCAHTOA: Sin=Opposite/Hypotenuse, Cos=Adjacent/Hypotenuse, Tan=Opposite/Adjacent.",
+    howTo: "In a right triangle: identify opposite, adjacent, and hypotenuse. Use SOHCAHTOA to find missing sides or angles.",
+    example: "If you know angle 30° and hypotenuse 10, use Sin(30°) = opposite/10, so opposite = 10 × 0.5 = 5.",
+    tips: "Know SOHCAHTOA and practice with right-angled triangles.",
+    difficulty: "Only works for right triangles (one 90° angle)."
+  },
+  "Digestive System": {
+    definition: "The digestive system breaks down food into smaller pieces we can absorb and use for energy. It includes the mouth, stomach, small intestine, and large intestine.",
+    howTo: "Food travels: Mouth (mechanical breakdown) → Stomach (chemical breakdown with enzymes) → Small intestine (absorption) → Large intestine (water absorption) → Exit",
+    example: "When you eat a sandwich: your teeth break it (mechanical), your saliva starts breaking it down (chemical), it goes to your stomach where acid works on it, then nutrients are absorbed.",
+    tips: "Follow the path of food and the role of enzymes.",
+    difficulty: "Enzymes are proteins that speed up the breakdown of food."
+  },
+  "Respiration": {
+    definition: "Respiration is the process cells use to release energy from food. Aerobic respiration uses oxygen, anaerobic respiration does not.",
+    howTo: "In aerobic respiration: Glucose + Oxygen → Energy (ATP) + Carbon Dioxide + Water. Your cells use this energy to do everything.",
+    example: "When you exercise, your cells need more ATP energy, so you breathe faster to get more oxygen. Runners breathe hard because they need lots of energy!",
+    tips: "Differentiate between aerobic and anaerobic respiration.",
+    difficulty: "Aerobic means 'with air' (oxygen). Anaerobic means 'without air'."
+  },
+  "Genetics": {
+    definition: "Genetics is the study of inheritance. Dominant traits show up even with one copy. Recessive traits need two copies. Punnett squares predict offspring traits.",
+    howTo: "Use a Punnett square: write parent genes on sides, fill in boxes. Count results to see probability of each trait.",
+    example: "If both parents have brown eyes (B) but carry blue (b), there's a 25% chance of blue-eyed baby (bb).",
+    tips: "Study dominant and recessive traits with simple Punnett squares.",
+    difficulty: "Capital letters = dominant. Lowercase = recessive."
+  },
+  "Ecology": {
+    definition: "Ecology studies how organisms interact with each other and their environment. Habitats provide food and shelter. Food webs show complex feeding relationships.",
+    howTo: "Draw a food web connecting different food chains. Show how energy flows and what happens if one organism disappears.",
+    example: "Plants → Herbivores → Carnivores. If plants die, herbivores starve, then carnivores have no prey.",
+    tips: "Understand habitats, food webs, and how organisms depend on each other.",
+    difficulty: "Ecosystems are balanced. Removing one species affects many others."
+  },
+  "Essay Writing": {
+    definition: "An essay is organized writing with an introduction, body paragraphs, and conclusion. It explains or argues a main idea.",
+    howTo: "Structure: 1) Introduction with a hook and thesis. 2) Body paragraphs with topic sentences and evidence. 3) Conclusion that restates your main idea.",
+    example: "Title: Why Reading is Important. Intro: Hook about stories. Body: Benefits like knowledge, imagination, vocabulary. Conclusion: Restate importance.",
+    tips: "Use a clear introduction, body, and conclusion for your paragraph or essay.",
+    difficulty: "Use examples and evidence to support each point you make."
+  },
+  "Grammar Rules": {
+    definition: "Grammar is the system of rules for writing and speaking correctly. It includes tenses, parts of speech, and punctuation.",
+    howTo: "Master the basics: 1) Nouns (things), verbs (actions), adjectives (descriptors). 2) Verb tenses: past (went), present (go), future (will go). 3) Punctuation: periods, commas, question marks.",
+    example: "Wrong: 'He go to school.' Correct: 'He goes to school.' Tense agreement: 'I walked and ate.' Not: 'I walked and eating.'",
+    tips: "Focus on tenses, subject-verb agreement, and punctuation.",
+    difficulty: "Subject and verb must agree: 'He runs' not 'He run'."
+  },
+  "Comprehension": {
+    definition: "Comprehension means understanding what you read. The main idea is the key point. Supporting details explain the main idea.",
+    howTo: "Read carefully. Underline key words. Ask yourself: What is the main idea? What details support it? What happened first, second, third?",
+    example: "Story: 'Maria studied for her test. She got 95%.' Main idea: Studying helps you succeed. Detail: She studied. Outcome: She got 95%.",
+    tips: "Underline keywords, find the main idea, and answer in full sentences.",
+    difficulty: "The main idea is often in the first or last sentence."
+  },
+  "Speech and Oral Work": {
+    definition: "Good speaking means clear pronunciation, good pace, eye contact, and using voice changes to show emotion or emphasis.",
+    howTo: "Practice: 1) Speak slowly and clearly. 2) Make eye contact. 3) Use hand gestures. 4) Change your tone for important words. 5) Pause for effect.",
+    example: "Instead of: 'I like books.' Say: 'I absolutely LOVE books because they take me to amazing worlds.' (Emphasis + passion)",
+    tips: "Practice speaking clearly and using good vocabulary in a structured way.",
+    difficulty: "Confidence comes from practice. Record yourself and listen."
+  },
+  "Literary Devices": {
+    definition: "Literary devices are techniques writers use to create effect. Metaphor compares without 'like'. Simile compares with 'like'. Personification gives human traits to objects.",
+    howTo: "When reading, look for: Metaphor ('life is a journey'), Simile ('brave as a lion'), Personification ('the wind whispered'), Repetition (same words/phrases).",
+    example: "'The stars danced in the night sky' is personification (stars can't dance). 'Lonely as a cloud' is simile.",
+    tips: "Look for metaphors, similes, personification, and repetition in texts.",
+    difficulty: "These devices make writing more interesting and memorable."
+  },
+  "Summary Writing": {
+    definition: "A summary briefly restates the main ideas of a text in your own words. Keep it short and focus on what's most important.",
+    howTo: "Read the text. Identify main ideas. Remove small details and examples. Write briefly using your own words. Don't add your opinions.",
+    example: "Original: 'The Lion King tells the story of Simba, who must escape danger and grow up.' Summary: 'Simba must grow up and face his destiny.'",
+    tips: "Keep only the main ideas and leave out small details.",
+    difficulty: "Summaries should be 1/3 to 1/2 the length of the original."
+  },
+  "Letter Writing": {
+    definition: "A formal letter has: date, address, salutation (Dear...), body paragraphs, closing, and signature.",
+    howTo: "Format: 1) Your address at top. 2) Date. 3) Recipient address. 4) 'Dear Sir/Madam:' 5) Body (clear topic sentences). 6) 'Yours faithfully,' 7) Signature.",
+    example: "Applying for job: Intro paragraph states position. Middle explains qualifications. Closing asks for an interview.",
+    tips: "Write with a clear format: address, salutation, body, closing.",
+    difficulty: "Keep it professional and polite. Check for spelling errors."
+  },
+  "Debate Skills": {
+    definition: "Debating means arguing a point clearly using evidence. You need a clear stance, supporting reasons, and rebuttals to counter opponent arguments.",
+    howTo: "1) State your position clearly. 2) Give 2-3 reasons with evidence. 3) Use examples. 4) Listen to opponents. 5) Counter their points respectfully.",
+    example: "Position: 'School uniforms should be mandatory.' Reason 1: Reduces bullying about clothes. Reason 2: Improves focus on learning.",
+    tips: "Use short arguments, examples, and speaking confidence.",
+    difficulty: "Always back up your claims with facts or examples."
+  },
+  "Rights and Duties": {
+    definition: "Rights are things you're entitled to (freedom, education, safety). Duties are responsibilities you have to others and society.",
+    howTo: "Identify rights you enjoy (vote, speak freely). Identify duties (pay taxes, follow laws, respect others). They balance each other.",
+    example: "Right: You can go to school. Duty: Students must respect teachers and school rules.",
+    tips: "A right is something you are entitled to, while a duty is your responsibility.",
+    difficulty: "Rights come with duties. If you want free speech, you must listen to others too."
+  },
+  "Government Structure": {
+    definition: "Most governments have three branches: Executive (President/Prime Minister, carries out laws), Legislature (Parliament, makes laws), Judiciary (Courts, enforces laws).",
+    howTo: "Each branch has different roles. Executive proposes laws. Legislature debates and votes. Judiciary interprets laws. They check each other's power.",
+    example: "President wants to pass a law. Parliament votes. If it passes, courts ensure it's fair and constitutional.",
+    tips: "Learn the roles of the executive, legislature, and judiciary.",
+    difficulty: "This system is called 'checks and balances' - prevents one person/group from having too much power."
+  },
+  "Citizenship": {
+    definition: "Citizenship means being a member of a country with rights and responsibilities. Good citizens participate in community and obey laws.",
+    howTo: "Be a good citizen: Follow laws, vote, help your community, respect diversity, pay taxes, volunteer, speak up against injustice.",
+    example: "A good Nigerian citizen respects the constitution, votes fairly, and helps develop their community.",
+    tips: "Study how citizens contribute to peace, law, and national development.",
+    difficulty: "Citizenship is not just about having a passport - it's about active participation."
+  },
+  "National Identity": {
+    definition: "National identity is what makes a country unique: its symbols (flag, anthem), values (democracy, unity), culture, history, and shared beliefs.",
+    howTo: "Learn your country's: Flag and what colors mean, National anthem and lyrics, Historical events that shaped the nation, National values and motto.",
+    example: "Nigeria's flag: Green (agriculture), White (peace), Red (strength). Motto: 'Unity and Faith, Peace and Progress.'",
+    tips: "Look at symbols, values, and culture that unite a country.",
+    difficulty: "National identity brings people together despite differences."
+  },
+  "Probability": {
+    definition: "Probability is the chance something will happen, from 0 (impossible) to 1 (certain). 0.5 or 50% means it might happen or might not.",
+    howTo: "Probability = (favorable outcomes) / (total possible outcomes). If a die has 6 sides, probability of rolling a 3 is 1/6.",
+    example: "Coin flip: 1 heads, 1 tails, so probability of heads = 1/2 = 50%.",
+    tips: "Start with outcomes and count equally likely possibilities.",
+    difficulty: "With multiple events, multiply probabilities."
+  },
+  "Vectors": {
+    definition: "A vector has direction and magnitude (size). It's shown as an arrow. Velocity is a vector (30 km/h north). Speed is not (just 30 km/h).",
+    howTo: "Vectors can be added end-to-end. Draw first vector, start second vector at the end of the first, draw result from start to finish.",
+    example: "If wind pushes you 5m east and you swim 3m north, your total displacement is found by adding the vectors.",
+    tips: "Use direction and magnitude to explain movement in a plane.",
+    difficulty: "Vectors have both size and direction. Be specific about both!"
+  },
+  "Coordinate Geometry": {
+    definition: "A coordinate plane has x-axis (horizontal) and y-axis (vertical). A point (3,5) is 3 units right and 5 units up.",
+    howTo: "Plot points. Connect them to see shapes. Find slope (rise/run). Find distance between points using the distance formula.",
+    example: "Point A (1,2) and B (4,6). Slope = (6-2)/(4-1) = 4/3. Distance = √[(4-1)² + (6-2)²] = 5.",
+    tips: "Plot points to find slopes, midpoints, and distances.",
+    difficulty: "The distance formula is: √[(x₂-x₁)² + (y₂-y₁)²]"
+  },
+  "Exam Revision": {
+    definition: "Exam revision means reviewing all topics systematically to be ready. Use past papers, make notes, test yourself.",
+    howTo: "Plan revision: 1) Cover all topics. 2) Make summary notes. 3) Do practice questions under timed conditions. 4) Review mistakes. 5) Rest before exam.",
+    example: "If revision starts 4 weeks before, do different topic each week. Practice full exam papers in week 4.",
+    tips: "Solve past questions in sections and review mistakes carefully.",
+    difficulty: "Past exam papers are your best study tool - they show what to expect."
+  },
+  "Comprehensive Revision": {
+    definition: "Comprehensive revision covers all topics deeply before exams. Grammar, writing, comprehension, and speaking all work together.",
+    howTo: "Review each component: Grammar rules with examples, Essay structure and practice, Reading comprehension passages, Speaking practice with friends.",
+    example: "Don't just memorize grammar - apply it in essays. Don't just read - summarize what you read.",
+    tips: "Review grammar, summary writing, and reading understanding together.",
+    difficulty: "Connect ideas across topics. Show how everything relates."
+  },
+  "Argumentative Essay": {
+    definition: "An argumentative essay presents a clear position and defends it with evidence and reasoning. You must also address counterarguments.",
+    howTo: "Structure: 1) Introduction with clear thesis. 2) Body with reasons and evidence. 3) Address opposing view. 4) Conclusion restating position.",
+    example: "Thesis: 'School should start later.' Evidence: Teens need sleep, grades improve with more rest, science supports this.",
+    tips: "Give clear points, examples, and a strong conclusion.",
+    difficulty: "Use credible sources and acknowledge valid points from the other side."
+  },
+  "Oral Reading": {
+    definition: "Oral reading means reading aloud effectively. Use correct pace, pause at punctuation, change voice for emotion or importance.",
+    howTo: "Practice: Read silently first to understand. Mark pauses at punctuation. Read slowly and clearly. Use expression.",
+    example: "For 'Stop! Don't go there!' - pause after Stop, emphasize the warning, show concern in voice.",
+    tips: "Pause where needed and use voice variations to express meaning.",
+    difficulty: "Practice with different texts (poetry, drama, prose) to master variety."
+  },
+  "Exam Practice": {
+    definition: "Exam practice means doing full practice tests under exam conditions to build confidence and identify weak areas.",
+    howTo: "1) Do past papers in timed conditions. 2) Don't use notes. 3) Mark your work strictly. 4) Review all mistakes carefully. 5) Repeat until confident.",
+    example: "If exam is 3 hours, practice 3-hour papers. This trains your speed and stamina.",
+    tips: "Set time limits and answer each question directly.",
+    difficulty: "Exam practice shows you what you really know vs. what you think you know."
+  },
+  "Electoral System": {
+    definition: "Electoral systems determine how people vote and how votes become results. In most democracies, citizens vote for representatives.",
+    howTo: "Citizens register as voters. On election day, they vote for candidates. Votes are counted. Winner is announced. Elected officials represent people in government.",
+    example: "Nigeria: Citizens vote for President and legislators. Majority of votes wins. Winners make laws and decisions.",
+    tips: "Learn how voting works and why elections matter.",
+    difficulty: "Different countries use different systems (first-past-post, proportional representation, etc)."
+  },
+  "Constitution": {
+    definition: "A constitution is the supreme law of a country. It defines the structure of government, the rights of citizens, and how power is used.",
+    howTo: "Read your constitution: Know your rights, understand how government works, understand your duties, know what to do if rights are violated.",
+    example: "Nigeria's constitution (1999) guarantees freedom of speech, the right to education, and right to fair trial.",
+    tips: "A constitution is the rulebook guiding how a country is governed.",
+    difficulty: "Constitutions can be amended to reflect changing times."
+  },
+  "Political Parties": {
+    definition: "Political parties are groups of people with similar political beliefs. They nominate candidates, run campaigns, and work to implement their policies.",
+    howTo: "Join a party, volunteer, campaign for candidates you support, vote for your preferred party, hold leaders accountable.",
+    example: "Nigeria has multiple parties: APC, PDP, others. They present different plans for the country's future.",
+    tips: "Know their role in representation, campaigns, and policy.",
+    difficulty: "Choose parties based on which policies match your values."
+  },
+  "Public Administration": {
+    definition: "Public administration is how government provides services: education, healthcare, roads, police, water. Administrators ensure services reach all citizens efficiently.",
+    howTo: "Government agencies employ administrators who manage budgets, hire staff, plan services, and ensure quality. Citizens pay taxes to fund these services.",
+    example: "The Ministry of Education manages schools, curriculum, and teacher training. The Public Works Ministry builds and maintains roads.",
+    tips: "Study how government services and offices are managed for the public.",
+    difficulty: "Good administration is transparent, fair, and focused on serving people."
+  },
+  "Evolution": {
+    definition: "Evolution is the process by which organisms gradually change over time to adapt to their environment. Those best adapted survive and reproduce.",
+    howTo: "Understand Darwin's theory: Organisms have variations. Those better adapted survive (natural selection). They pass traits to offspring. Over time, species change.",
+    example: "Giraffes with longer necks can eat higher leaves when food is scarce. They survive and have longer-necked babies.",
+    tips: "Study how organisms change over time to survive better.",
+    difficulty: "Evolution takes millions of years. Small changes accumulate."
+  },
+  "Human Reproduction": {
+    definition: "Human reproduction starts when sperm meets egg (fertilization), forming a zygote. It develops into an embryo, then fetus, and is born as a baby.",
+    howTo: "Key stages: Fertilization (sperm + egg) → Embryo (weeks 1-8) → Fetus (weeks 9-40) → Birth. Pregnancy lasts about 9 months.",
+    example: "Ovaries produce eggs. Testes produce sperm. They meet in the uterus. Baby grows and is born.",
+    tips: "Understand the main stages and the roles of reproductive organs.",
+    difficulty: "The placenta provides oxygen and nutrients to the developing baby."
+  },
+  "Plant Nutrition": {
+    definition: "Plants make their own food through photosynthesis using sunlight, water, and carbon dioxide. They also need minerals from soil.",
+    howTo: "Photosynthesis happens in leaves: Sunlight + Water + CO₂ = Glucose (food) + Oxygen. Minerals from soil help with growth.",
+    example: "A tomato plant needs sunlight (for photosynthesis), water (from roots), and soil minerals (for healthy leaves and fruit).",
+    tips: "Learn how plants make food and what they need from the environment.",
+    difficulty: "Without any one ingredient, photosynthesis stops."
+  },
+  "Variation": {
+    definition: "Variation is the difference in traits between individuals of the same species. Inherited variation comes from genes. Environmental variation comes from surroundings.",
+    howTo: "Inherited variation: Parents pass traits through genes (eye color). Environmental variation: Diet, climate, and lifestyle affect height and skin tone.",
+    example: "Your height comes partly from parents' genes (inherited) and partly from nutrition (environmental).",
+    tips: "Know the difference between inherited and environmental variation.",
+    difficulty: "Most traits are influenced by both genes and environment."
+  }
+};
+
+
+function detectQuestionType(question) {
+  const lower = question.toLowerCase();
+  if (lower.match(/what is|define|meaning|explain.*what/)) return "definition";
+  if (lower.match(/how do|how to|how can|steps|procedure|method/)) return "howTo";
+  if (lower.match(/example|give.*example|show me/)) return "example";
+  if (lower.match(/why|reason|cause|purpose|important/)) return "difficulty";
+  if (lower.match(/difference|compare|vs|versus|different from/)) return "difficulty";
+  return "tips";
+}
+
+function generateSmartResponse(question, topic, subject, classLevel) {
+  if (!question || question.trim().length === 0) {
+    return `
+      <div class="study-tip-box" style="background: #fff3dc; border: 2px solid var(--warning);">
+        <strong>⚠️ No question entered</strong>
+        <p>Please type a question in the text box to get a personalized explanation!</p>
+        <p style="color: var(--muted); font-size: 0.9rem; margin-top: 12px;">Examples: "What is ${topic.name}?", "How do I...?", "Can you give an example?", "Why is this important?"</p>
+      </div>
+    `;
+  }
+
+  const kb = studyKnowledgeBase[topic.name];
+  const questionType = detectQuestionType(question);
+  let response = "";
+
+  if (kb) {
+    const content = kb[questionType] || kb.tips;
+    response = `
+      <div class="study-tip-box">
+        <strong>${topic.name}</strong>
+        <p><strong>Your question:</strong> "${question}"</p>
+        <p>${content}</p>
+      </div>
+    `;
+  } else {
+    response = `
+      <div class="study-tip-box">
+        <strong>${topic.name}</strong>
+        <p>You asked: "${question}"</p>
+        <p>${topic.tips}</p>
+      </div>
+    `;
+  }
+
+  response += `
+    <div class="study-note-list">
+      <div>
+        <span>✓</span>
+        <p><strong>Did this help?</strong> Try asking another question or move on to the quiz to test your knowledge.</p>
+      </div>
+      <div>
+        <span>💡</span>
+        <p><strong>Pro tip:</strong> The best way to learn is to ask questions and then explain the answer to someone else.</p>
+      </div>
+    </div>
+  `;
+
+  return response;
+}
+
+function getCurrentSubject() {
+  return classData[selectedClass].subjects.find((subject) => subject.name === selectedSubject) || classData[selectedClass].subjects[0];
+}
+
+function getCurrentTopic() {
+  const subject = getCurrentSubject();
+  return subject.topicList.find((topic) => topic.name === selectedTopic) || subject.topicList[0];
+}
+
+function renderClasses() {
+  classGrid.innerHTML = classOrder
+    .map(
+      (level) => `
+        <button class="class-card ${selectedClass === level ? "active" : ""}" data-class="${level}" type="button">
+          <span class="class-badge">${level}</span>
+          <h3>${classData[level].label}</h3>
+          <p>${classData[level].description}</p>
+        </button>
+      `
+    )
+    .join("");
+
+  document.querySelectorAll(".class-card").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedClass = button.dataset.class;
+      selectedSubject = classData[selectedClass].subjects[0].name;
+      selectedTopic = classData[selectedClass].subjects[0].topicList[0].name;
+      renderClasses();
+      renderSubjects();
+      renderTopics();
+      renderStudySummary();
+      renderQuiz();
+      renderProgress();
+      document.getElementById("classes").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+function renderSubjects() {
+  const currentClass = classData[selectedClass];
+  subjectTitle.textContent = `Subjects for ${currentClass.label}`;
+
+  subjectGrid.innerHTML = currentClass.subjects
+    .map(
+      (subject) => `
+        <button class="subject-card ${selectedSubject === subject.name ? "active" : ""}" data-subject="${subject.name}" type="button">
+          <div>
+            <div class="subject-icon">${subject.icon}</div>
+            <h3>${subject.name}</h3>
+            <p>Explore topics, revision notes, and practice questions.</p>
+          </div>
+
+          <div class="subject-meta">
+            <span>${subject.topics} topics</span>
+            <span class="lesson-note">${subject.badge}</span>
+          </div>
+        </button>
+      `
+    )
+    .join("");
+
+  document.querySelectorAll(".subject-card").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedSubject = button.dataset.subject;
+      const subject = getCurrentSubject();
+      selectedTopic = subject.topicList[0].name;
+      renderSubjects();
+      renderTopics();
+      renderStudySummary();
+      renderQuiz();
+      renderProgress();
+      document.getElementById("topics").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+function renderTopics() {
+  const subject = getCurrentSubject();
+  const topicList = subject.topicList || [];
+
+  topicTitle.textContent = `Topics for ${subject.name}`;
+  topicGrid.innerHTML = topicList
+    .map(
+      (topic) => `
+        <button class="topic-card ${selectedTopic === topic.name ? "selected" : ""}" data-topic="${topic.name}" type="button">
+          <div class="topic-card-top">
+            <span class="topic-tag">${topic.difficulty}</span>
+            <span class="topic-time">${topic.time}</span>
+          </div>
+          <h3>${topic.name}</h3>
+          <p>${topic.tips}</p>
+        </button>
+      `
+    )
+    .join("");
+
+  document.querySelectorAll(".topic-card").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedTopic = button.dataset.topic;
+      renderTopics();
+      renderStudySummary();
+      document.getElementById("study").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+function renderStudySummary() {
+  const subject = getCurrentSubject();
+  const topic = getCurrentTopic();
+
+  studyTitle.textContent = `${subject.name} · ${topic.name}`;
+  selectedTopicBadge.textContent = `${subject.name} · ${topic.name}`;
+
+  if (!questionInput.value.trim()) {
+    studyOutput.innerHTML = `
+      <div class="study-tip-box">
+        <strong>Study tip:</strong>
+        <p>${topic.tips}</p>
+      </div>
+    `;
+  }
+}
+
+function buildStudyResponse(question, topic, subject, classLevel) {
+  return generateSmartResponse(question, topic, subject, classLevel);
+}
+
+function renderQuiz() {
+  const subjectName = getCurrentSubject().name;
+  const questions = quizBank[selectedClass]?.[subjectName] || quizBank.SS1.Mathematics;
+  const quizHeader = document.getElementById("questionCounter");
+  const questionCounterText = `Question 1 of ${questions.length}`;
+  if (quizHeader) quizHeader.textContent = questionCounterText;
+
+  quizList.innerHTML = questions
+    .map(
+      (item, index) => `
+        <div class="quiz-item">
+          <p class="quiz-question-number">Question ${index + 1} of ${questions.length}</p>
+          <p class="quiz-question-text">${item.question}</p>
+          <div class="quiz-options">
+            ${item.options
+              .map(
+                (option) => `
+                  <label class="quiz-option">
+                    <input type="radio" name="q-${index}" value="${option}" />
+                    <span>${option}</span>
+                  </label>
+                `
+              )
+              .join("")}
+          </div>
+        </div>
+      `
+    )
+    .join("");
+
+  quizResult.innerHTML = "";
+}
+
+function renderProgress() {
+  const stats = progressState[selectedClass];
+  if (document.getElementById("streakValue")) document.getElementById("streakValue").textContent = stats.streak;
+  if (document.getElementById("scoreValue")) document.getElementById("scoreValue").textContent = stats.score;
+  if (document.getElementById("topicsCoveredValue")) document.getElementById("topicsCoveredValue").textContent = stats.topics;
+}
+
+submitQuizBtn.addEventListener("click", () => {
+  const subjectName = getCurrentSubject().name;
+  const questions = quizBank[selectedClass]?.[subjectName] || quizBank.SS1.Mathematics;
+  let correct = 0;
+
+  questions.forEach((item, index) => {
+    const selected = document.querySelector(`input[name="q-${index}"]:checked`);
+    if (selected && selected.value === item.answer) {
+      correct += 1;
+    }
+  });
+
+  const score = Math.round((correct / questions.length) * 100);
+  const feedbackClass = score >= 80 ? "quiz-result-success" : score >= 60 ? "quiz-result-good" : "quiz-result-retry";
+  quizResult.innerHTML = `
+    <div class="${feedbackClass}">
+      <strong>Quiz Complete!</strong>
+      <p>Your score: <span>${score}%</span> (${correct}/${questions.length} correct)</p>
+      <p>${score >= 80 ? "Excellent work! Keep it up." : score >= 60 ? "Good effort! Review and try again." : "Keep practicing to improve your score."}</p>
+    </div>
+  `;
+});
+
+quizNextBtn.addEventListener("click", () => {
+  renderQuiz();
+});
+
+const backToStudyBtn = document.getElementById("backToStudyBtn");
+if (backToStudyBtn) {
+  backToStudyBtn.addEventListener("click", () => {
+    document.getElementById("study").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+
+generateStudyBtn.addEventListener("click", () => {
+  const topic = getCurrentTopic();
+  const subject = getCurrentSubject();
+  const question = questionInput.value;
+  studyOutput.innerHTML = buildStudyResponse(question, topic, subject, selectedClass);
+});
+
+clearQuestionBtn.addEventListener("click", () => {
+  questionInput.value = "";
+  studyOutput.innerHTML = "<p>Select a topic and ask a question to get a short, beginner-friendly explanation.</p>";
+});
+
+backToSubjectsBtn.addEventListener("click", () => {
+  document.getElementById("subjects").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+showTopicsBtn.addEventListener("click", () => {
+  document.getElementById("topics").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+changeClassBtn.addEventListener("click", () => {
+  document.getElementById("classes").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+renderClasses();
+renderSubjects();
+renderTopics();
+renderStudySummary();
+renderQuiz();
+renderProgress();
