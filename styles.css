@@ -3319,32 +3319,41 @@ button:disabled {
 
 }
 /* ==========================================
-   TGEN-AI MOBILE NAV FIX
+   TGEN-AI MOBILE NAVIGATION
    ========================================== */
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
+  .main-nav {
+    display: flex !important;
+  }
+
   .topbar {
-    padding: 0 12px;
     width: 100%;
+    height: 67px;
+    padding: 0;
   }
 
   .nav-container {
     width: 100%;
-    min-width: 0;
-    gap: 10px;
+    max-width: none;
+    height: 67px;
+    margin: 0;
+    padding: 0 14px;
+    gap: 8px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
   }
 
   .brand {
     flex: 0 0 auto;
-    min-width: 0;
   }
 
   .brand-logo {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 18px;
   }
 
   .brand-text {
@@ -3352,32 +3361,28 @@ button:disabled {
   }
 
   .main-nav {
-    display: flex !important;
     flex: 1 1 auto;
     min-width: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-    gap: 4px;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .main-nav::-webkit-scrollbar {
-    display: none;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-around;
+    gap: 2px;
+    overflow: hidden;
   }
 
   .main-nav button {
-    flex: 0 0 auto;
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 9px 7px;
     white-space: nowrap;
-    padding: 10px 9px;
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .nav-dashboard-btn {
-    flex: 0 0 42px;
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
+    flex: 0 0 38px;
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
     padding: 0;
     border-radius: 50%;
     font-size: 0;
@@ -3392,27 +3397,24 @@ button:disabled {
 
 @media (max-width: 420px) {
   .nav-container {
-    gap: 6px;
+    padding: 0 10px;
+    gap: 5px;
   }
 
   .brand-logo {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-  }
-
-  .main-nav {
-    gap: 2px;
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
   }
 
   .main-nav button {
-    padding: 9px 7px;
-    font-size: 12px;
+    padding: 8px 5px;
+    font-size: 11px;
   }
 
   .nav-dashboard-btn {
-    width: 38px;
-    min-width: 38px;
-    height: 38px;
+    width: 35px;
+    min-width: 35px;
+    height: 35px;
   }
 }
