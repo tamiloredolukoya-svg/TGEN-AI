@@ -3775,4 +3775,17 @@ body {
   }
 }.input-hint {
   display: none !important;
+}#generateStudyBtn {
+  font-size: 0 !important;
+}
+
+#generateStudyBtn span {
+  display: none !important;
+}
+
+#generateStudyBtn::before {
+  content: "↑";
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
 }
