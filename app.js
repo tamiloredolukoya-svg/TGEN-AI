@@ -15752,3 +15752,323 @@ if (
 
   console.log("TGEN-AI: Chat persistence, New chat, and 5-question quiz patch loaded.");
 })();
+/* =========================================================
+   TGEN-AI — UNIVERSAL AI TUTOR + NOTE READER
+   ========================================================= */
+(function () {
+  const universalStyle = document.createElement("style");
+  universalStyle.id = "tgen-universal-tutor-style";
+  universalStyle.textContent = `
+    .tgen-universal-intro {
+      margin: 0 0 18px;
+      padding: 22px 24px;
+      border: 1px solid #dbeafe;
+      border-radius: 20px;
+      background: linear-gradient(135deg,#eff6ff,#ffffff);
+    }
+    .tgen-universal-intro .tgen-eyebrow {
+      color: #2563eb;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+    .tgen-universal-intro h2 {
+      margin-top: 6px;
+      font-size: 28px;
+      letter-spacing: -0.7px;
+    }
+    .tgen-universal-intro p {
+      margin-top: 7px;
+      color: #667085;
+      font-size: 13px;
+    }
+    .tgen-subject-chip {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .tgen-note-panel {
+      margin: 0 0 18px;
+      padding: 18px;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 5px 18px rgba(15,23,42,.05);
+    }
+    .tgen-note-panel h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+    .tgen-note-panel p {
+      margin: 5px 0 12px;
+      color: #667085;
+      font-size: 12px;
+    }
+    .tgen-note-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+    .tgen-note-upload-btn,
+    .tgen-note-explain-btn {
+      border: 1px solid #d9e0ea;
+      border-radius: 11px;
+      padding: 9px 13px;
+      background: #fff;
+      color: #172033;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tgen-note-explain-btn {
+      border-color: #2563eb;
+      background: #2563eb;
+      color: #fff;
+    }
+    .tgen-note-explain-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+    .tgen-note-file-name {
+      margin-top: 9px;
+      color: #667085;
+      font-size: 11px;
+      word-break: break-word;
+    }
+    .tgen-note-status {
+      margin-top: 8px;
+      color: #2563eb;
+      font-size: 11px;
+    }
+    #tgenTutorEmpty h2 {
+      font-size: 21px;
+    }
+    #tgenTutorEmpty p {
+      max-width: 500px;
+    }
+    @media (max-width: 600px) {
+      .tgen-universal-intro {
+        padding: 18px;
+      }
+      .tgen-universal-intro h2 {
+        font-size: 23px;
+      }
+      .tgen-note-panel {
+        padding: 15px;
+      }
+      .tgen-note-actions > * {
+        flex: 1 1 auto;
+      }
+    }
+  `;
+  document.head.appendChild(universalStyle);
+
+  let selectedNoteFile = null;
+
+  function escapeLocal(value) {
+    if (typeof escapeHTML === "function") return escapeHTML(value);
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function setupUniversalTutor() {
+    const study = document.getElementById("study");
+    const chatWrapper = study?.querySelector(".chat-wrapper");
+    const header = study?.querySelector(".study-header");
+    if (!study || !chatWrapper) return;
+
+    const title = document.getElementById("studyTitle");
+    if (title) title.textContent = "What do you want to learn today?";
+
+    const badge = document.getElementById("selectedTopicBadge");
+    if (badge) {
+      badge.textContent = selectedSubject || "Your subject";
+      badge.style.display = selectedSubject ? "inline-block" : "none";
+    }
+
+    const oldBack = header?.querySelector(".back-btn");
+    if (oldBack) {
+      oldBack.textContent = "← Back to subjects";
+      oldBack.onclick = () => showScreen("subjects");
+    }
+
+    const browse = document.getElementById("showTopicsBtn");
+    if (browse) browse.style.display = "none";
+
+    let intro = document.getElementById("tgenUniversalIntro");
+    if (!intro) {
+      intro = document.createElement("div");
+      intro.id = "tgenUniversalIntro";
+      intro.className = "tgen-universal-intro";
+      chatWrapper.parentNode.insertBefore(intro, chatWrapper);
+    }
+
+    intro.innerHTML = `
+      <div class="tgen-eyebrow">AI TUTOR</div>
+      <h2>What do you want to learn today?</h2>
+      <p>Name any topic, question or concept. TGEN-AI will teach it from the basics and break it down clearly.</p>
+      <span class="tgen-subject-chip">Subject: ${escapeLocal(selectedSubject || "General")}</span>
+    `;
+
+    let notes = document.getElementById("tgenNotePanel");
+    if (!notes) {
+      notes = document.createElement("div");
+      notes.id = "tgenNotePanel";
+      notes.className = "tgen-note-panel";
+      chatWrapper.parentNode.insertBefore(notes, chatWrapper);
+    }
+
+    notes.innerHTML = `
+      <h3>Have a note you want TGEN-AI to explain?</h3>
+      <p>Upload a PDF, document, text note, or image. TGEN-AI can read it and teach it one section at a time.</p>
+      <div class="tgen-note-actions">
+        <input id="tgenNoteFile" type="file" accept=".pdf,.doc,.docx,.txt,.md,.png,.jpg,.jpeg" hidden>
+        <button type="button" class="tgen-note-upload-btn" id="tgenChooseNoteBtn">＋ Upload note</button>
+        <button type="button" class="tgen-note-explain-btn" id="tgenExplainNoteBtn" disabled>Explain my note →</button>
+      </div>
+      <div class="tgen-note-file-name" id="tgenNoteFileName">No note selected.</div>
+      <div class="tgen-note-status" id="tgenNoteStatus"></div>
+    `;
+
+    const input = document.getElementById("tgenNoteFile");
+    const choose = document.getElementById("tgenChooseNoteBtn");
+    const explain = document.getElementById("tgenExplainNoteBtn");
+    const fileName = document.getElementById("tgenNoteFileName");
+    const status = document.getElementById("tgenNoteStatus");
+
+    if (choose && !choose.dataset.wired) {
+      choose.dataset.wired = "true";
+      choose.onclick = () => input?.click();
+    }
+
+    if (input && !input.dataset.wired) {
+      input.dataset.wired = "true";
+      input.onchange = () => {
+        selectedNoteFile = input.files?.[0] || null;
+        if (fileName) fileName.textContent = selectedNoteFile
+          ? selectedNoteFile.name
+          : "No note selected.";
+        if (status) status.textContent = selectedNoteFile
+          ? "Ready to explain your note."
+          : "";
+        if (explain) explain.disabled = !selectedNoteFile;
+      };
+    }
+
+    if (explain && !explain.dataset.wired) {
+      explain.dataset.wired = "true";
+      explain.onclick = explainSelectedNote;
+    }
+
+    const empty = document.getElementById("topicNameEmpty");
+    if (empty) {
+      empty.id = "tgenTutorEmpty";
+      const h2 = empty.querySelector("h2");
+      const p = empty.querySelector("p");
+      if (h2) h2.textContent = "Ask me anything about what you're learning.";
+      if (p) p.textContent = "Name any topic and I’ll explain it clearly, step by step.";
+      const chips = empty.querySelector(".suggestion-chips");
+      if (chips) {
+        chips.innerHTML = `
+          <button onclick="setQuestion('Explain a topic from the basics')">Explain from basics</button>
+          <button onclick="setQuestion('Give me a simple example')">Give me an example</button>
+          <button onclick="setQuestion('Quiz me on this subject')">Quiz me</button>
+        `;
+      }
+    }
+
+    const questionInput = document.getElementById("questionInput");
+    if (questionInput) {
+      questionInput.placeholder = "Name any topic or ask anything...";
+    }
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || "");
+        const comma = result.indexOf(",");
+        resolve(comma >= 0 ? result.slice(comma + 1) : result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function explainSelectedNote() {
+    if (!selectedNoteFile) return;
+
+    const status = document.getElementById("tgenNoteStatus");
+    const explain = document.getElementById("tgenExplainNoteBtn");
+    if (status) status.textContent = "Reading your note...";
+    if (explain) explain.disabled = true;
+
+    try {
+      const base64 = await fileToBase64(selectedNoteFile);
+      const response = await fetch("/api/note-study", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: selectedNoteFile.name,
+          mimeType: selectedNoteFile.type || "application/octet-stream",
+          fileData: base64,
+          subject: selectedSubject || "",
+          profile: window.userProfile || null
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Could not read the note.");
+
+      const chatArea = document.getElementById("chatArea");
+      if (chatArea) chatArea.innerHTML = "";
+
+      window.renderChatMessage("Explain my uploaded note one section at a time.", "user");
+      window.renderChatMessage(data.answer || "I couldn't read that note.", "ai");
+      if (status) status.textContent = "Note loaded. Start with the first section above.";
+    } catch (error) {
+      if (status) status.textContent = error.message || "Could not read that note.";
+    } finally {
+      if (explain) explain.disabled = !selectedNoteFile;
+    }
+  }
+
+  window.selectSubject = function (subjectName) {
+    if (!userProfile || !userProfile.subjects?.includes(subjectName)) return;
+
+    selectedSubject = subjectName;
+    selectedTopic = null;
+
+    if (typeof renderSubjects === "function") renderSubjects();
+    showScreen("study");
+    setTimeout(setupUniversalTutor, 0);
+  };
+
+  const previousUniversalShowScreen = window.showScreen;
+  window.showScreen = function (screenId) {
+    const result = previousUniversalShowScreen(screenId);
+    if (screenId === "study") {
+      setTimeout(setupUniversalTutor, 0);
+    }
+    return result;
+  };
+
+  setTimeout(() => {
+    if (document.getElementById("study")) setupUniversalTutor();
+  }, 250);
+
+  console.log("TGEN-AI: Universal AI Tutor + Note Reader patch loaded.");
+})();
