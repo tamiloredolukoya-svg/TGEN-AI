@@ -3773,4 +3773,6 @@ body {
     font-size: 20px !important;
     line-height: 1 !important;
   }
+}.input-hint {
+  display: none !important;
 }
