@@ -1,105 +1,108 @@
-# StudyMate AI - Access Instructions
+# TGEN-AI - Access Instructions
 
-## 🌐 How to Access StudyMate AI from Different Devices
+## 🌐 How to Access TGEN-AI From Different Devices
 
-The StudyMate AI app is now running and accessible from all devices on your network!
+TGEN-AI can be accessed from different devices when they are connected to the same WiFi network as the computer running the server.
 
 ### Your Device IP Address
-```
+
 192.168.0.111:8000
-```
 
 ---
 
 ## 📱 Access Methods
 
-### **On This Mac (Your Computer)**
-- Open your browser and go to:
-  ```
-  http://localhost:8000
-  ```
-  OR
-  ```
-  http://192.168.0.111:8000
-  ```
+### On This Mac
 
-### **On Your Phone (iOS, Android)**
-1. Make sure your phone is on the same WiFi network as your computer
-2. Open Safari, Chrome, or any web browser
-3. Go to:
-   ```
-   http://192.168.0.111:8000
-   ```
-4. The app is fully optimized for mobile - everything will be touch-friendly!
+Open your browser and go to:
 
-### **On Your Tablet (iPad, Android Tablet)**
-1. Make sure your tablet is on the same WiFi network
-2. Open your web browser
-3. Go to:
-   ```
-   http://192.168.0.111:8000
-   ```
+http://localhost:8000
 
-### **On Another Computer**
-1. Make sure it's connected to the same WiFi network
-2. Open any web browser
+OR:
+
+http://192.168.0.111:8000
+
+### On Your Phone
+
+1. Connect your phone to the same WiFi network as the computer.
+2. Open Safari or Chrome.
 3. Go to:
-   ```
-   http://192.168.0.111:8000
-   ```
+
+http://192.168.0.111:8000
+
+### On Your Tablet
+
+1. Connect your tablet to the same WiFi network.
+2. Open a browser.
+3. Go to:
+
+http://192.168.0.111:8000
+
+### On Another Computer
+
+1. Connect it to the same WiFi network.
+2. Open a browser.
+3. Go to:
+
+http://192.168.0.111:8000
 
 ---
 
-## ✅ What's Optimized for Mobile/Tablet
+## 🤖 About TGEN-AI
 
-- ✓ Responsive layout that adapts to all screen sizes
-- ✓ Touch-friendly buttons (bigger tap targets)
-- ✓ Easy-to-read text on small screens
-- ✓ One-column layout on phones, multi-column on tablets
-- ✓ Properly sized input fields for mobile typing
-- ✓ Fast loading even on slower networks
+TGEN-AI is an AI-powered learning assistant designed to help students understand subjects, revise topics, practice questions, and learn through AI-powered conversations.
+
+### Developer
+
+The person who developed and made me is Tamilore Olukoya, brother of sheddypoppi.
+
+OpenAI technology powers the AI capabilities of TGEN-AI, but TGEN-AI itself was developed and made by Tamilore Olukoya.
+
+---
+
+## 📚 Features
+
+1. AI Tutor
+2. Class and Department Selection
+3. Subjects
+4. Daily Challenge
+5. Notes
+6. Flashcards
+7. Progress Tracking
+8. Games
+9. Cross-Device Access
 
 ---
 
 ## 🔗 Network Requirements
 
-- All devices must be on the **same WiFi network**
-- No internet connection needed (works on local network)
-- Multiple people can use the app simultaneously
-
----
-
-## 📋 Features Available on All Devices
-
-1. **Homepage** - Beautiful intro and navigation
-2. **Class Selection** - Choose SS1, SS2, or SS3
-3. **Subject Selection** - Pick from available subjects
-4. **Topic Selection** - Find specific topics to study
-5. **Study Page** - Ask questions and get smart answers
-6. **Quiz Page** - Test your knowledge
-7. **Progress Page** - Track your learning
+- All devices must be connected to the same WiFi network.
+- The computer running TGEN-AI must keep the server running.
+- The local IP address may change when the computer reconnects to a different network.
 
 ---
 
 ## 🚀 Server Status
 
-- Status: **Running** ✓
-- Port: **8000**
-- Address: **192.168.0.111**
-- Type: **Local Network (No Internet Required)**
+- Status: Running ✓
+- Port: 8000
+- Address: 192.168.0.111
+- Type: Local Network
 
 ---
 
 ## 💡 Tips
 
-- **Bookmark the URL** for quick access:
-  - Phone: `http://192.168.0.111:8000`
-  - Tablet: `http://192.168.0.111:8000`
-  
-- **If it doesn't load:** Check that you're on the same WiFi as the host computer
+Bookmark:
 
-- **For classroom use:** All students on the same network can access simultaneously!
+http://192.168.0.111:8000
+
+If the app doesn't load:
+
+- Check that both devices are on the same WiFi.
+- Make sure `node server.mjs` is still running.
+- Check that your Mac's IP address has not changed.
 
 ---
 
-Enjoy StudyMate AI! 📚✨
+Enjoy TGEN-AI! 📚🤖

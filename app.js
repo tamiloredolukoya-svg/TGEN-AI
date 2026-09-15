@@ -16072,3 +16072,2179 @@ if (
 
   console.log("TGEN-AI: Universal AI Tutor + Note Reader patch loaded.");
 })();
+/* =========================================================
+   TGEN-AI UI FLOW FIX
+   - Keeps existing features intact
+   - Centers desktop navigation
+   - Keeps mobile navigation compact and centered
+   - Makes AI Tutor copy clearer
+   - Moves Note Reader into its own Notes section
+   ========================================================= */
+(function () {
+  "use strict";
+
+  function esc(value) {
+    if (typeof escapeHTML === "function") return escapeHTML(value);
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  /* ---------- UI STYLES ---------- */
+  const style = document.createElement("style");
+  style.id = "tgen-ui-flow-fix-styles";
+  style.textContent = `
+    /* Desktop: keep the nav visually centered regardless of brand/dashboard width. */
+    @media (min-width: 901px) {
+      .topbar .nav-container {
+        position: relative;
+      }
+
+      .topbar .main-nav {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        z-index: 2;
+        white-space: nowrap;
+      }
+    }
+
+    /* Tablet/mobile: compact nav without the old left-shifting scroll behaviour. */
+    @media (max-width: 900px) {
+      .topbar .nav-container {
+        position: relative;
+      }
+
+      .topbar .main-nav {
+        display: flex !important;
+        position: static;
+        transform: none;
+        flex: 1 1 auto;
+        min-width: 0;
+        justify-content: center;
+        align-items: center;
+        overflow: visible;
+        gap: 2px;
+      }
+
+      .topbar .main-nav button {
+        flex: 0 1 auto;
+        white-space: nowrap;
+        padding: 8px 6px;
+        font-size: 11px;
+      }
+
+      .topbar .brand-text {
+        display: none;
+      }
+
+      .topbar .nav-dashboard-btn {
+        flex: 0 0 auto;
+        width: 38px;
+        min-width: 38px;
+        height: 38px;
+        padding: 0;
+        border-radius: 50%;
+        font-size: 0;
+      }
+
+      .topbar .nav-dashboard-btn::before {
+        content: "T";
+        font-size: 15px;
+        font-weight: 800;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .topbar .nav-container {
+        gap: 3px;
+      }
+
+      .topbar .brand-logo {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+      }
+
+      .topbar .main-nav {
+        gap: 0;
+      }
+
+      .topbar .main-nav button {
+        padding: 7px 4px;
+        font-size: 10px;
+      }
+
+      .topbar .nav-dashboard-btn {
+        width: 34px;
+        min-width: 34px;
+        height: 34px;
+      }
+    }
+
+    /* Cleaner AI Tutor copy. */
+    #study .study-title-row h1 {
+      letter-spacing: -0.5px;
+    }
+
+    .tgen-ui-flow-intro {
+      margin: 0 0 18px;
+      padding: 24px 26px;
+      border: 1px solid rgba(59, 130, 246, 0.16);
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(248, 250, 252, 0.96));
+    }
+
+    .tgen-ui-flow-intro .tgen-ui-eyebrow {
+      display: block;
+      margin-bottom: 7px;
+      color: #2563eb;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+    }
+
+    .tgen-ui-flow-intro h2 {
+      margin: 0 0 7px;
+      color: #111827;
+      font-size: 25px;
+      line-height: 1.15;
+      letter-spacing: -0.7px;
+    }
+
+    .tgen-ui-flow-intro p {
+      margin: 0;
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .tgen-ui-subject-chip {
+      display: inline-flex;
+      margin-top: 14px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.10);
+      color: #2563eb;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Notes is a real separate screen. */
+    #tgenNotesScreen {
+      display: none;
+      min-height: calc(100vh - 76px);
+      padding: 44px 0 70px;
+    }
+
+    #tgenNotesScreen.active {
+      display: block;
+    }
+
+    .tgen-notes-container {
+      width: min(100% - 40px, 1100px);
+      margin: 0 auto;
+    }
+
+    .tgen-notes-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .tgen-notes-back {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      margin-bottom: 18px;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tgen-notes-back:hover {
+      color: #2563eb;
+    }
+
+    .tgen-notes-eyebrow {
+      display: block;
+      margin-bottom: 8px;
+      color: #2563eb;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+    }
+
+    .tgen-notes-header h1 {
+      margin: 0;
+      color: #111827;
+      font-size: clamp(30px, 4vw, 42px);
+      letter-spacing: -1.5px;
+      line-height: 1.05;
+    }
+
+    .tgen-notes-header p {
+      max-width: 600px;
+      margin: 10px 0 0;
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .tgen-notes-card {
+      padding: 28px;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+    }
+
+    .tgen-notes-dropzone {
+      padding: 42px 24px;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 20px;
+      text-align: center;
+      background: #f8fafc;
+      transition: 0.2s ease;
+    }
+
+    .tgen-notes-dropzone.has-file {
+      border-style: solid;
+      border-color: rgba(37, 99, 235, 0.35);
+      background: rgba(239, 246, 255, 0.65);
+    }
+
+    .tgen-notes-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 23px;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.2);
+    }
+
+    .tgen-notes-dropzone h2 {
+      margin: 0 0 7px;
+      color: #111827;
+      font-size: 21px;
+    }
+
+    .tgen-notes-dropzone p {
+      max-width: 650px;
+      margin: 0 auto 18px;
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .tgen-notes-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tgen-notes-upload,
+    .tgen-notes-explain {
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .tgen-notes-upload {
+      border: 1px solid #dbe3ee;
+      background: #fff;
+      color: #1f2937;
+    }
+
+    .tgen-notes-explain {
+      border: 0;
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .tgen-notes-explain:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .tgen-notes-file {
+      margin-top: 16px;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .tgen-notes-status {
+      min-height: 20px;
+      margin-top: 7px;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    .tgen-notes-result {
+      display: none;
+      margin-top: 20px;
+      padding: 22px;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    .tgen-notes-result.active {
+      display: block;
+    }
+
+    .tgen-notes-result h3 {
+      margin: 0 0 8px;
+      color: #111827;
+      font-size: 17px;
+    }
+
+    .tgen-notes-result-body {
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      #tgenNotesScreen {
+        padding-top: 30px;
+      }
+
+      .tgen-notes-container {
+        width: calc(100% - 28px);
+      }
+
+      .tgen-notes-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .tgen-notes-card {
+        padding: 16px;
+      }
+
+      .tgen-notes-dropzone {
+        padding: 30px 15px;
+      }
+
+      .tgen-notes-actions > * {
+        width: 100%;
+      }
+
+      .tgen-ui-flow-intro {
+        padding: 19px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  /* ---------- NAV ---------- */
+  function addNotesNavButton() {
+    const nav = document.querySelector(".main-nav");
+    if (!nav || nav.querySelector("#tgenNotesNavBtn")) return;
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.id = "tgenNotesNavBtn";
+    btn.textContent = "Notes";
+    btn.onclick = () => window.showScreen("notes");
+
+    const quiz = Array.from(nav.querySelectorAll("button"))
+      .find(button => button.textContent.trim().toLowerCase() === "quiz");
+
+    if (quiz) nav.insertBefore(btn, quiz);
+    else nav.appendChild(btn);
+  }
+
+  /* ---------- NOTES SCREEN ---------- */
+  let notesScreenReady = false;
+  let notesFile = null;
+
+  function ensureNotesScreen() {
+    if (notesScreenReady && document.getElementById("tgenNotesScreen")) return;
+
+    const main = document.querySelector("main");
+    if (!main) return;
+
+    let screen = document.getElementById("tgenNotesScreen");
+    if (!screen) {
+      screen = document.createElement("section");
+      screen.id = "tgenNotesScreen";
+      screen.className = "app-screen";
+      main.appendChild(screen);
+    }
+
+    screen.innerHTML = `
+      <div class="tgen-notes-container">
+        <div class="tgen-notes-header">
+          <div>
+            <button type="button" class="tgen-notes-back" id="tgenNotesBack">← Back</button>
+            <span class="tgen-notes-eyebrow">STUDY FROM YOUR NOTES</span>
+            <h1>Turn your notes into a lesson.</h1>
+            <p>Upload your own notes and TGEN-AI will read them, explain the material clearly, and work through the sections one at a time.</p>
+          </div>
+        </div>
+
+        <div class="tgen-notes-card">
+          <div class="tgen-notes-dropzone" id="tgenNotesDropzone">
+            <div class="tgen-notes-icon">✦</div>
+            <h2>Upload a note to study</h2>
+            <p>Use a PDF, Word document, text file, Markdown file, or image of your notes.</p>
+            <div class="tgen-notes-actions">
+              <input id="tgenNotesFileInput" type="file" accept=".pdf,.doc,.docx,.txt,.md,.png,.jpg,.jpeg" hidden>
+              <button type="button" class="tgen-notes-upload" id="tgenNotesChoose">＋ Choose note</button>
+              <button type="button" class="tgen-notes-explain" id="tgenNotesExplain" disabled>Explain my note ↑</button>
+            </div>
+            <div class="tgen-notes-file" id="tgenNotesFileName">No note selected.</div>
+            <div class="tgen-notes-status" id="tgenNotesStatus"></div>
+          </div>
+
+          <div class="tgen-notes-result" id="tgenNotesResult">
+            <h3>Lesson from your note</h3>
+            <div class="tgen-notes-result-body" id="tgenNotesResultBody"></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("tgenNotesBack").onclick = () => {
+      window.showScreen(userProfile ? "classes" : "profile");
+    };
+
+    const input = document.getElementById("tgenNotesFileInput");
+    const choose = document.getElementById("tgenNotesChoose");
+    const explain = document.getElementById("tgenNotesExplain");
+    const name = document.getElementById("tgenNotesFileName");
+    const status = document.getElementById("tgenNotesStatus");
+    const dropzone = document.getElementById("tgenNotesDropzone");
+
+    choose.onclick = () => input.click();
+
+    input.onchange = () => {
+      notesFile = input.files?.[0] || null;
+      name.textContent = notesFile ? notesFile.name : "No note selected.";
+      status.textContent = notesFile ? "Ready to explain." : "";
+      explain.disabled = !notesFile;
+      dropzone.classList.toggle("has-file", !!notesFile);
+    };
+
+    explain.onclick = explainNote;
+    notesScreenReady = true;
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || "");
+        const comma = result.indexOf(",");
+        resolve(comma >= 0 ? result.slice(comma + 1) : result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function explainNote() {
+    if (!notesFile) return;
+
+    const explain = document.getElementById("tgenNotesExplain");
+    const status = document.getElementById("tgenNotesStatus");
+    const result = document.getElementById("tgenNotesResult");
+    const body = document.getElementById("tgenNotesResultBody");
+
+    explain.disabled = true;
+    status.textContent = "Reading your note...";
+    result.classList.remove("active");
+
+    try {
+      const base64 = await fileToBase64(notesFile);
+      const response = await fetch("/api/note-study", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filename: notesFile.name,
+          mimeType: notesFile.type || "application/octet-stream",
+          fileData: base64,
+          subject: selectedSubject || "",
+          profile: window.userProfile || null
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Could not read the note.");
+      }
+
+      body.innerHTML = esc(data.answer || "I couldn't read that note.")
+        .replace(/\n/g, "<br>");
+      result.classList.add("active");
+      status.textContent = "Your first section is ready.";
+    } catch (error) {
+      status.textContent = error.message || "Could not read the note.";
+    } finally {
+      explain.disabled = !notesFile;
+    }
+  }
+
+  /* ---------- AI TUTOR COPY ---------- */
+  function updateTutorCopy() {
+    const study = document.getElementById("study");
+    if (!study) return;
+
+    const title = document.getElementById("studyTitle");
+    if (title) title.textContent = "AI Tutor";
+
+    const badge = document.getElementById("selectedTopicBadge");
+    if (badge) {
+      badge.textContent = selectedSubject ? `Subject: ${selectedSubject}` : "Choose a subject";
+    }
+
+    const intro = document.getElementById("tgenUiFlowIntro") || document.createElement("div");
+    intro.id = "tgenUiFlowIntro";
+    intro.className = "tgen-ui-flow-intro";
+
+    const chatWrapper = study.querySelector(".chat-wrapper");
+    if (chatWrapper && !intro.parentNode) {
+      chatWrapper.parentNode.insertBefore(intro, chatWrapper);
+    }
+
+    intro.innerHTML = `
+      <span class="tgen-ui-eyebrow">AI TUTOR</span>
+      <h2>Learn anything in your subject.</h2>
+      <p>Ask a question, name a topic, or describe what you find difficult. TGEN-AI will explain it step by step.</p>
+      ${selectedSubject ? `<span class="tgen-ui-subject-chip">Subject: ${esc(selectedSubject)}</span>` : ""}
+    `;
+
+    const oldNotes = document.getElementById("tgenNotePanel");
+    if (oldNotes) oldNotes.remove();
+
+    const browse = document.getElementById("showTopicsBtn");
+    if (browse) browse.style.display = "none";
+
+    const input = document.getElementById("questionInput");
+    if (input) input.placeholder = "Ask about a topic, question or concept...";
+
+    const empty = document.getElementById("topicNameEmpty");
+    if (empty) {
+      const h2 = empty.querySelector("h2");
+      const p = empty.querySelector("p");
+      if (h2) h2.textContent = "What can I help you understand?";
+      if (p) p.textContent = "Ask anything about your subject and we’ll work through it together.";
+    }
+  }
+
+  /* ---------- SAFE NAV WRAPPER ---------- */
+  const previousShowScreen = window.showScreen;
+  window.showScreen = function (screenId) {
+    if (screenId === "notes") {
+      ensureNotesScreen();
+    }
+
+    const result = previousShowScreen(screenId);
+
+    if (screenId === "study") {
+      setTimeout(updateTutorCopy, 0);
+    }
+
+    return result;
+  };
+
+  /* ---------- INIT ---------- */
+  addNotesNavButton();
+  updateTutorCopy();
+
+  console.log("TGEN-AI: UI flow fix loaded without removing existing features.");
+})();
+
+/* Final duplicate-intro guard: keep only the new AI Tutor intro. */
+(function () {
+  "use strict";
+  function removeOldTutorIntro() {
+    const oldIntro = document.getElementById("tgenUniversalIntro");
+    if (oldIntro) oldIntro.remove();
+  }
+  removeOldTutorIntro();
+  const previousShowScreen = window.showScreen;
+  window.showScreen = function (screenId) {
+    const result = previousShowScreen(screenId);
+    if (screenId === "study") {
+      setTimeout(removeOldTutorIntro, 0);
+    }
+    return result;
+  };
+})();
+
+/* =========================================================
+   TGEN-AI — START LEARNING FLOW PATCH
+   Keep existing features intact.
+   Start Learning -> Subjects (if profile exists), never Topics.
+   Selecting a subject still opens AI Tutor through the existing flow.
+   ========================================================= */
+(function () {
+  "use strict";
+
+  window.startLearning = function () {
+    const profile = window.userProfile || (typeof userProfile !== "undefined" ? userProfile : null);
+
+    if (!profile) {
+      showScreen("profile");
+      return;
+    }
+
+    selectedClass = profile.className || selectedClass;
+    selectedSubject = null;
+    selectedTopic = null;
+
+    if (typeof renderSubjects === "function") {
+      renderSubjects();
+    }
+
+    showScreen("subjects");
+  };
+
+  console.log("TGEN-AI: Start Learning now opens Subjects instead of Topics.");
+})();
+
+/* =========================================================
+   TGEN-AI PRODUCT FLOW + LEARNING FEATURES PATCH
+   Targeted additions only — preserves existing app code.
+   ========================================================= */
+(function TGENProductPatch(){
+  "use strict";
+
+  const PROFILE_KEY = "tgen-ai-profile";
+  const ONBOARD_KEY = "tgen-ai-onboarding-complete";
+
+  const safeJSON = (key, fallback) => {
+    try { return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
+    catch { return fallback; }
+  };
+  const saveJSON = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+  const esc = (value) => {
+    if (typeof window.escapeHTML === "function") return window.escapeHTML(String(value ?? ""));
+    return String(value ?? "").replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]));
+  };
+
+  function getProfile(){
+    return safeJSON(PROFILE_KEY, null) || window.userProfile || null;
+  }
+
+  function subjectsFor(department){
+    const source = window.TGEN_PROFILE_SUBJECTS || TGEN_PROFILE_SUBJECTS || {};
+    return Array.isArray(source[department]) ? source[department] : [];
+  }
+
+  function topicsFor(subject){
+    const source = window.TGEN_TOPICS || (typeof TGEN_TOPICS !== "undefined" ? TGEN_TOPICS : {});
+    return Array.isArray(source?.[subject]) && source[subject].length
+      ? source[subject]
+      : ["Introduction", "Key Concepts", "Examples", "Practice", "Revision"];
+  }
+
+  function createScreen(id, title, eyebrow){
+    if (document.getElementById(id)) return document.getElementById(id);
+    const section = document.createElement("section");
+    section.id = id;
+    section.className = "app-screen";
+    section.innerHTML = `
+      <div class="page-container tgen-feature-page">
+        <div class="page-header">
+          <div><span class="page-eyebrow">${eyebrow}</span><h1>${title}</h1><p id="${id}Intro">Build your learning routine with TGEN-AI.</p></div>
+          <div class="page-header-icon">✦</div>
+        </div>
+        <div id="${id}Content"></div>
+      </div>`;
+    document.querySelector("main")?.appendChild(section);
+    return section;
+  }
+
+  function ensureFeatureScreens(){
+    createScreen("notes", "Study from your notes", "NOTES");
+    createScreen("flashcards", "Flashcards", "FLASHCARDS");
+    createScreen("quickPractice", "Quick Practice", "PRACTICE");
+    createScreen("quickRevision", "Quick Revision", "REVISION");
+    createScreen("dailyChallenge", "Daily Challenge", "TODAY");
+    createScreen("studyPlanner", "Study Planner", "PLANNER");
+    createScreen("examPrep", "Exam Prep", "EXAM PREP");
+  }
+
+  function ensureNav(){
+    const nav = document.querySelector(".main-nav");
+    if (!nav) return;
+    nav.innerHTML = `
+      <button type="button" data-tgen-nav="home">Home</button>
+      <button type="button" data-tgen-nav="classes">Classes</button>
+      <button type="button" data-tgen-nav="study">AI Tutor</button>
+      <button type="button" data-tgen-nav="notes">Notes</button>
+      <button type="button" data-tgen-nav="quiz">Quiz</button>
+      <button type="button" data-tgen-nav="progress">Progress</button>
+      <div class="tgen-more-nav">
+        <button type="button" id="tgenMoreBtn" class="tgen-more-btn">More ▾</button>
+        <div id="tgenMoreMenu" class="tgen-more-menu">
+          <button type="button" data-tgen-nav="flashcards">Flashcards</button>
+          <button type="button" data-tgen-nav="quickPractice">Quick Practice</button>
+          <button type="button" data-tgen-nav="quickRevision">Quick Revision</button>
+          <button type="button" data-tgen-nav="dailyChallenge">Daily Challenge</button>
+          <button type="button" data-tgen-nav="studyPlanner">Study Planner</button>
+          <button type="button" data-tgen-nav="examPrep">Exam Prep</button>
+        </div>
+      </div>`;
+    nav.querySelectorAll("[data-tgen-nav]").forEach(btn => btn.addEventListener("click", () => {
+      const target = btn.dataset.tgenNav;
+      if (target !== "home" && !getProfile()) { startLearning(); return; }
+      document.getElementById("tgenMoreMenu")?.classList.remove("open");
+      showScreen(target);
+    }));
+    document.getElementById("tgenMoreBtn")?.addEventListener("click", (event) => {
+      event.stopPropagation();
+      document.getElementById("tgenMoreMenu")?.classList.toggle("open");
+    });
+    if (!window.__tgenMoreOutside) {
+      window.__tgenMoreOutside = true;
+      document.addEventListener("click", () => document.getElementById("tgenMoreMenu")?.classList.remove("open"));
+    }
+  }
+
+  function ensureOnboarding(){
+    if (document.getElementById("tgenOnboarding")) return;
+    const overlay = document.createElement("div");
+    overlay.id = "tgenOnboarding";
+    overlay.className = "tgen-onboarding";
+    overlay.innerHTML = `
+      <div class="tgen-onboarding-card">
+        <div class="tgen-onboarding-progress"><span id="tgenStepLabel">1 of 8</span><div><i id="tgenStepBar"></i></div></div>
+        <div id="tgenOnboardingBody"></div>
+        <div class="tgen-onboarding-actions">
+          <button type="button" id="tgenOnboardBack" class="secondary-btn">← Back</button>
+          <button type="button" id="tgenOnboardNext" class="primary-btn">Next →</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+
+    const state = {step:0,name:"",email:"",password:"",department:"",className:"",subject:"",topic:""};
+    const body = overlay.querySelector("#tgenOnboardingBody");
+    const next = overlay.querySelector("#tgenOnboardNext");
+    const back = overlay.querySelector("#tgenOnboardBack");
+    const label = overlay.querySelector("#tgenStepLabel");
+    const bar = overlay.querySelector("#tgenStepBar");
+
+    const render = () => {
+      label.textContent = `${state.step + 1} of 8`;
+      bar.style.width = `${((state.step + 1) / 8) * 100}%`;
+      back.style.visibility = state.step === 0 ? "hidden" : "visible";
+      next.textContent = state.step === 7 ? "Finish →" : "Next →";
+
+      if(state.step === 0){
+        body.innerHTML = `<div class="tgen-onboarding-icon">T</div><span class="page-eyebrow">WELCOME TO TGEN-AI</span><h1>Learn smarter with TGEN-AI.</h1><p>Your personal AI learning companion for studying, practice, quizzes, flashcards, revision and exam preparation.</p><div class="tgen-onboarding-list"><span>✓ Learn school topics</span><span>✓ Ask an AI teacher</span><span>✓ Practice and take quizzes</span><span>✓ Track your real progress</span></div>`;
+      } else if(state.step === 1){
+        body.innerHTML = `<span class="page-eyebrow">YOUR NAME</span><h1>What should we call you?</h1><p>We'll use your name throughout TGEN-AI.</p><input id="tgenOBName" class="tgen-ob-input" placeholder="Enter your name" autocomplete="name" value="${esc(state.name)}">`;
+      } else if(state.step === 2){
+        body.innerHTML = `<span class="page-eyebrow">ACCOUNT</span><h1>Create your account</h1><p>This prototype keeps account details on this device. Passwords are not shown on your profile.</p><label>Email</label><input id="tgenOBEmail" class="tgen-ob-input" type="email" placeholder="Enter your email" autocomplete="email" value="${esc(state.email)}"><label>Password</label><input id="tgenOBPassword" class="tgen-ob-input" type="password" placeholder="Create a password" autocomplete="new-password" value="${esc(state.password)}">`;
+      } else if(state.step === 3){
+        body.innerHTML = `<span class="page-eyebrow">DEPARTMENT</span><h1>What department are you in?</h1><p>Choose the department that best matches your subjects.</p><div class="tgen-choice-grid">${["General","Science","Arts","Commercial"].map(x=>`<button type="button" class="tgen-choice ${state.department===x?"selected":""}" data-value="${x}">${x}</button>`).join("")}</div>`;
+      } else if(state.step === 4){
+        body.innerHTML = `<span class="page-eyebrow">CLASS</span><h1>What class are you in?</h1><p>We'll use this to personalize your learning.</p><div class="tgen-choice-grid">${["SS1","SS2","SS3"].map(x=>`<button type="button" class="tgen-choice ${state.className===x?"selected":""}" data-value="${x}">${x}</button>`).join("")}</div>`;
+      } else if(state.step === 5){
+        const subs = subjectsFor(state.department);
+        body.innerHTML = `<span class="page-eyebrow">SUBJECT</span><h1>What subject do you want to study?</h1><p>Only subjects relevant to your selected department are shown.</p><div class="tgen-choice-grid">${subs.map(x=>`<button type="button" class="tgen-choice ${state.subject===x?"selected":""}" data-value="${esc(x)}">${esc(x)}</button>`).join("")}</div>`;
+      } else if(state.step === 6){
+        const topics = topicsFor(state.subject);
+        body.innerHTML = `<span class="page-eyebrow">TOPIC</span><h1>What topic do you want to learn?</h1><p>Choose a topic from your selected subject.</p><div class="tgen-choice-grid">${topics.map(x=>`<button type="button" class="tgen-choice ${state.topic===x?"selected":""}" data-value="${esc(x)}">${esc(x)}</button>`).join("")}</div>`;
+      } else {
+        body.innerHTML = `<span class="page-eyebrow">READY TO LEARN</span><h1>You're all set.</h1><p>Your learning setup is ready.</p><div class="tgen-summary"><div><span>Name</span><strong>${esc(state.name)}</strong></div><div><span>Class</span><strong>${esc(state.className)}</strong></div><div><span>Department</span><strong>${esc(state.department)}</strong></div><div><span>Subject</span><strong>${esc(state.subject)}</strong></div><div><span>Topic</span><strong>${esc(state.topic)}</strong></div></div>`;
+      }
+
+      body.querySelectorAll(".tgen-choice").forEach(btn=>btn.addEventListener("click",()=>{
+        if(state.step===3) state.department=btn.dataset.value;
+        if(state.step===4) state.className=btn.dataset.value;
+        if(state.step===5) state.subject=btn.dataset.value;
+        if(state.step===6) state.topic=btn.dataset.value;
+        render();
+      }));
+    };
+
+    const validate = () => {
+      if(state.step===1){ state.name=body.querySelector("#tgenOBName")?.value.trim()||""; if(!state.name) return "Please enter your name."; }
+      if(state.step===2){ state.email=body.querySelector("#tgenOBEmail")?.value.trim()||""; state.password=body.querySelector("#tgenOBPassword")?.value||""; if(!/^\S+@\S+\.\S+$/.test(state.email)) return "Please enter a valid email."; if(state.password.length<4) return "Create a password with at least 4 characters."; }
+      if(state.step===3 && !state.department) return "Choose a department.";
+      if(state.step===4 && !state.className) return "Choose your class.";
+      if(state.step===5 && !state.subject) return "Choose a subject.";
+      if(state.step===6 && !state.topic) return "Choose a topic.";
+      return "";
+    };
+
+    next.addEventListener("click",()=>{
+      const error=validate(); if(error){ alert(error); return; }
+      if(state.step<7){ state.step++; render(); return; }
+      const profile={name:state.name,email:state.email,className:state.className,class:state.className,department:state.department,subjects:[state.subject],exam:"",learningPreferences:{},onboardingComplete:true};
+      saveJSON(PROFILE_KEY,profile); localStorage.setItem(ONBOARD_KEY,"1");
+      try { userProfile=profile; window.userProfile=profile; selectedClass=state.className; selectedDepartment=state.department; selectedSubject=state.subject; selectedTopic=state.topic; } catch(e){}
+      overlay.classList.remove("open");
+      setTimeout(()=>overlay.remove(),220);
+      if(typeof window.updateProfileUI==="function") window.updateProfileUI();
+      if(typeof window.createProfileMenu==="function") window.createProfileMenu();
+      showScreen("study");
+      setTimeout(()=>{
+        const title=document.getElementById("studyTitle"); if(title) title.textContent=`Ready to learn ${state.topic}?`;
+        const badge=document.getElementById("selectedTopicBadge"); if(badge) badge.textContent=state.topic;
+      },50);
+    });
+    back.addEventListener("click",()=>{ if(state.step>0){state.step--;render();} });
+    render();
+    overlay.classList.add("open");
+  }
+
+  // New first-time entry: Start Learning opens onboarding instead of the old profile/topics route.
+  window.startLearning = function(){
+    if(getProfile()){
+      showScreen("dashboard");
+      return;
+    }
+    ensureOnboarding();
+  };
+
+  // Keep subject selection useful after onboarding and avoid forcing a Topics page from Start Learning.
+  window.selectSubject = function(subjectName){
+    const profile=getProfile();
+    if(!profile || !Array.isArray(profile.subjects) || !profile.subjects.includes(subjectName)) return;
+    selectedSubject=subjectName;
+    selectedTopic=null;
+    showScreen("study");
+    const title=document.getElementById("studyTitle"); if(title) title.textContent="Ask TGEN-AI";
+    const badge=document.getElementById("selectedTopicBadge"); if(badge) badge.textContent=subjectName;
+    const backBtn=document.querySelector("#study .back-btn"); if(backBtn) backBtn.textContent="← Back to subjects";
+    const browse=document.getElementById("showTopicsBtn"); if(browse) browse.style.display="none";
+  };
+
+  function featureProfile(){
+    const p=getProfile();
+    if(!p) return null;
+    return p;
+  }
+
+  function renderNotes(){
+    const content=document.getElementById("notesContent"); if(!content) return;
+    content.innerHTML=`<div class="tgen-feature-card"><div class="tgen-feature-icon">📄</div><h2>Upload a note and learn from it</h2><p>TGEN-AI can read a PDF, document, text note or image and explain the material one section at a time.</p><input id="tgenNoteInput" type="file" accept=".pdf,.doc,.docx,.txt,.md,.png,.jpg,.jpeg" hidden><button class="primary-btn" id="tgenNotePick">＋ Upload note</button><p id="tgenNoteName" class="tgen-muted">No note selected.</p><button class="secondary-btn" id="tgenNoteExplain" disabled>Explain my note →</button><div id="tgenNoteResult" class="tgen-note-result"></div></div>`;
+    const input=content.querySelector("#tgenNoteInput"), pick=content.querySelector("#tgenNotePick"), explain=content.querySelector("#tgenNoteExplain"), name=content.querySelector("#tgenNoteName"), result=content.querySelector("#tgenNoteResult");
+    let file=null;
+    pick.onclick=()=>input.click();
+    input.onchange=()=>{file=input.files?.[0]||null; name.textContent=file?file.name:"No note selected."; explain.disabled=!file;};
+    explain.onclick=async()=>{
+      if(!file) return;
+      const p=featureProfile();
+      explain.disabled=true; explain.textContent="Reading note..."; result.innerHTML="<div class='tgen-loading'>TGEN-AI is reading your note…</div>";
+      try{
+        const reader=new FileReader(); reader.onload=async()=>{
+          const response=await fetch("/api/note-study",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({filename:file.name,mimeType:file.type||"application/octet-stream",fileData:String(reader.result).split(",")[1]||"",subject:selectedSubject||p?.subjects?.[0]||"",profile:p})});
+          const data=await response.json(); if(!response.ok) throw new Error(data.error||"Could not read note.");
+          result.innerHTML=`<div class='tgen-note-response'>${data.answer||data.response||"Your note was read successfully."}</div>`;
+        }; reader.onerror=()=>{throw new Error("Could not read the selected file.")}; reader.readAsDataURL(file);
+      }catch(e){ result.innerHTML=`<div class='tgen-error'>${esc(e.message)}</div>`; }
+      finally{ explain.disabled=false; explain.textContent="Explain my note →"; }
+    };
+  }
+
+  function renderFlashcards(){
+    const content=document.getElementById("flashcardsContent"); if(!content) return;
+    const p=featureProfile(); const subject=selectedSubject||p?.subjects?.[0]||"General Mathematics"; const topic=selectedTopic||topicsFor(subject)[0];
+    const questions = safeJSON(`tgen-flashcards:${subject}:${topic}`,null) || [
+      {q:`What is ${topic}?`,a:`Ask TGEN-AI to explain ${topic} clearly, then use this card to recall the main idea.`},
+      {q:`What is one key idea in ${topic}?`,a:`Review the key concepts of ${topic} and say one from memory.`},
+      {q:`How can you practise ${topic}?`,a:`Use Quick Practice or a quiz on ${topic}.`}
+    ];
+    let index=0,flipped=false;
+    const render=()=>{ const c=questions[index]; content.innerHTML=`<div class="tgen-flashcard-wrap"><div class="tgen-flashcard ${flipped?"flipped":""}" id="tgenFlashCard"><div class="tgen-card-face tgen-card-front"><span>QUESTION</span><h2>${esc(c.q)}</h2><small>Tap to flip</small></div><div class="tgen-card-face tgen-card-back"><span>ANSWER</span><h2>${esc(c.a)}</h2><small>Tap to flip back</small></div></div><div class="tgen-card-controls"><button class="secondary-btn" id="fcPrev">← Previous</button><span>${index+1} / ${questions.length}</span><button class="secondary-btn" id="fcNext">Next →</button></div><div class="tgen-card-controls"><button class="outline-btn" id="fcShuffle">Shuffle</button><button class="outline-btn" id="fcKnown">✓ Known</button><button class="outline-btn" id="fcPractice">Needs practice</button></div></div>`;
+      content.querySelector("#tgenFlashCard").onclick=()=>{flipped=!flipped;render();}; content.querySelector("#fcPrev").onclick=()=>{index=(index-1+questions.length)%questions.length;flipped=false;render();}; content.querySelector("#fcNext").onclick=()=>{index=(index+1)%questions.length;flipped=false;render();}; content.querySelector("#fcShuffle").onclick=()=>{questions.sort(()=>Math.random()-.5);index=0;flipped=false;render();};
+      content.querySelector("#fcKnown").onclick=()=>{localStorage.setItem(`tgen-fc-known:${subject}:${topic}:${index}`,"1");}; content.querySelector("#fcPractice").onclick=()=>{localStorage.setItem(`tgen-fc-practice:${subject}:${topic}:${index}`,"1");};
+    }; render();
+  }
+
+  function renderQuickPractice(){
+    const c=document.getElementById("quickPracticeContent"); if(!c) return;
+    c.innerHTML=`<div class="tgen-feature-card"><h2>Choose your practice size</h2><p>Questions use your selected subject and topic.</p><div class="tgen-choice-grid practice-size"><button class="tgen-choice" data-n="5">5 questions</button><button class="tgen-choice" data-n="10">10 questions</button><button class="tgen-choice" data-n="20">20 questions</button></div><div id="qpResult"></div></div>`;
+    c.querySelectorAll("[data-n]").forEach(btn=>btn.onclick=()=>{const n=Number(btn.dataset.n); localStorage.setItem("tgen-last-practice-size",String(n)); const r=c.querySelector("#qpResult"); r.innerHTML=`<div class="tgen-start-box"><strong>${n} questions ready.</strong><p>Start with the Quiz section to answer them using your selected subject and topic.</p><button class="primary-btn" onclick="showScreen('quiz')">Start Practice →</button></div>`;});
+  }
+
+  function renderQuickRevision(){
+    const c=document.getElementById("quickRevisionContent"); if(!c) return; const p=featureProfile(); const subject=selectedSubject||p?.subjects?.[0]||"your subject"; const topic=selectedTopic||topicsFor(subject)[0];
+    c.innerHTML=`<div class="tgen-feature-card"><span class="page-eyebrow">${esc(subject)}</span><h2>${esc(topic)}</h2><div class="tgen-revision-grid"><div><strong>Key definitions</strong><p>Ask the AI Tutor for the important terms and definitions in this topic.</p></div><div><strong>Important points</strong><p>Review the main ideas before moving on.</p></div><div><strong>Formulas & concepts</strong><p>Use the tutor for worked examples and formula explanations.</p></div><div><strong>Examples</strong><p>Ask for one worked example at a time.</p></div></div><button class="primary-btn" onclick="showScreen('study')">Review with AI Tutor →</button></div>`;
+  }
+
+  function renderDaily(){
+    const c=document.getElementById("dailyChallengeContent"); if(!c) return; const today=new Date().toISOString().slice(0,10); const key=`tgen-daily:${today}`; const done=localStorage.getItem(key)==="1"; const p=featureProfile(); const subject=selectedSubject||p?.subjects?.[0]||"General Mathematics";
+    c.innerHTML=`<div class="tgen-feature-card"><div class="tgen-feature-icon">⚡</div><span class="page-eyebrow">TODAY'S CHALLENGE</span><h2>5 questions in ${esc(subject)}</h2><p>Complete the quiz to record today's challenge as completed.</p><div class="tgen-daily-status ${done?"done":""}">${done?"✓ Challenge completed today":"Not completed yet"}</div><button class="primary-btn" ${done?"disabled":""} onclick="localStorage.setItem('tgen-daily-pending','${today}'); showScreen('quiz')">${done?"Completed":"Start Challenge →"}</button></div>`;
+  }
+
+  function renderPlanner(){
+    const c=document.getElementById("studyPlannerContent"); if(!c) return; let goals=safeJSON("tgen-planner-goals",[]); const draw=()=>{c.innerHTML=`<div class="tgen-feature-card"><h2>Plan a small study goal</h2><div class="tgen-planner-add"><input id="plannerInput" class="tgen-ob-input" placeholder="e.g. Study Mathematics for 30 minutes"><button class="primary-btn" id="plannerAdd">Add goal</button></div><div class="tgen-goals">${goals.length?goals.map((g,i)=>`<label class="tgen-goal ${g.done?"done":""}"><input type="checkbox" data-i="${i}" ${g.done?"checked":""}><span>${esc(g.text)}</span><button type="button" data-del="${i}">×</button></label>`).join(""):"<p class='tgen-muted'>No goals yet.</p>"}</div></div>`; c.querySelector("#plannerAdd").onclick=()=>{const text=c.querySelector("#plannerInput").value.trim();if(text){goals.push({text,done:false});saveJSON("tgen-planner-goals",goals);draw();}}; c.querySelectorAll("[data-i]").forEach(x=>x.onchange=()=>{goals[Number(x.dataset.i)].done=x.checked;saveJSON("tgen-planner-goals",goals);draw();}); c.querySelectorAll("[data-del]").forEach(x=>x.onclick=()=>{goals.splice(Number(x.dataset.del),1);saveJSON("tgen-planner-goals",goals);draw();});}; draw();
+  }
+
+  function renderExamPrep(){
+    const c=document.getElementById("examPrepContent"); if(!c) return; const p=featureProfile(); const exam=p?.exam||"Your exam"; const subject=selectedSubject||p?.subjects?.[0]||"Selected subject";
+    c.innerHTML=`<div class="tgen-feature-card"><span class="page-eyebrow">EXAM TARGET</span><h2>${esc(exam)}</h2><p>Prepare with a focused routine for ${esc(subject)}.</p><div class="tgen-exam-grid"><button onclick="showScreen('study')">AI explanations</button><button onclick="showScreen('quickRevision')">Quick revision</button><button onclick="showScreen('quickPractice')">Practice questions</button><button onclick="showScreen('quiz')">Timed quiz</button></div><p class="tgen-muted">Generated practice is practice material; it is not presented as official examination content.</p></div>`;
+  }
+
+  function wireDailyCompletion(){
+    if (window.__tgenDailyCompletionWired) return;
+    window.__tgenDailyCompletionWired = true;
+    const originalSubmit = window.submitQuiz;
+    if (typeof originalSubmit === "function") {
+      window.submitQuiz = function(){
+        const pending = localStorage.getItem("tgen-daily-pending");
+        const result = originalSubmit.apply(this, arguments);
+        setTimeout(() => {
+          const resultBox = document.getElementById("quizResult");
+          if (pending && resultBox && resultBox.style.display !== "none" && resultBox.textContent.trim()) {
+            localStorage.setItem(`tgen-daily:${pending}`, "1");
+            localStorage.removeItem("tgen-daily-pending");
+          }
+        }, 250);
+        return result;
+      };
+    }
+  }
+
+  function renderAll(){ ensureFeatureScreens(); ensureNav(); renderNotes(); renderFlashcards(); renderQuickPractice(); renderQuickRevision(); renderDaily(); renderPlanner(); renderExamPrep(); wireDailyCompletion(); }
+
+  // Clean the AI Tutor header and keep Notes separate.
+  function cleanTutor(){
+    const study=document.getElementById("study"); if(!study) return;
+    const title=study.querySelector("#studyTitle"); if(title) title.textContent="Ask TGEN-AI";
+    const intro=study.querySelector(".study-header");
+    if(intro){ const h=study.querySelector(".study-header p"); if(h) h.textContent="Ask questions, explore concepts and learn step by step."; }
+    const empty=study.querySelector("#topicNameEmpty h2"); if(empty) empty.textContent="What can I help you learn?";
+    const emptyP=study.querySelector("#topicNameEmpty p"); if(emptyP) emptyP.textContent="Name a topic, ask a question, or ask TGEN-AI to explain a concept clearly.";
+  }
+
+  // Patch showScreen without deleting the existing implementation.
+  const previousShowScreen=window.showScreen;
+  window.showScreen=function(screenId){
+    if(["notes","flashcards","quickPractice","quickRevision","dailyChallenge","studyPlanner","examPrep"].includes(screenId) && !getProfile()){
+      startLearning(); return;
+    }
+    const result=previousShowScreen ? previousShowScreen(screenId) : undefined;
+    if(screenId==="study") cleanTutor();
+    if(screenId==="notes") renderNotes();
+    if(screenId==="flashcards") renderFlashcards();
+    if(screenId==="quickPractice") renderQuickPractice();
+    if(screenId==="quickRevision") renderQuickRevision();
+    if(screenId==="dailyChallenge") renderDaily();
+    if(screenId==="studyPlanner") renderPlanner();
+    if(screenId==="examPrep") renderExamPrep();
+    return result;
+  };
+
+  // Make the old Topics button harmless for the new learning flow, while keeping the old screen available.
+  const topicButton=document.getElementById("showTopicsBtn"); if(topicButton) topicButton.style.display="none";
+
+  document.addEventListener("DOMContentLoaded",()=>{ setTimeout(()=>{ renderAll(); cleanTutor(); },120); });
+  setTimeout(()=>{ renderAll(); cleanTutor(); },500);
+})();
+/* TGEN-AI — Welcome + Glass Onboarding Patch
+   Targeted patch only. Does not replace existing app logic.
+*/
+(function () {
+  'use strict';
+
+  function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function hasProfile() {
+    return !!(window.userProfile && typeof window.userProfile === 'object');
+  }
+
+  function ensureWelcomeScreen() {
+    if (document.getElementById('tgenWelcome')) return;
+
+    const section = document.createElement('section');
+    section.id = 'tgenWelcome';
+    section.className = 'app-screen tgen-welcome-screen';
+    section.innerHTML = `
+      <div class="tgen-welcome-shell">
+        <div class="tgen-welcome-glass">
+          <div class="tgen-welcome-badge"><span></span>TGEN-AI</div>
+          <div class="tgen-welcome-layout">
+            <div class="tgen-welcome-copy">
+              <p class="tgen-welcome-eyebrow">YOUR PERSONAL AI STUDY COMPANION</p>
+              <h1>Study smarter.<br><em>Understand more.</em></h1>
+              <p class="tgen-welcome-lead">
+                TGEN-AI helps you learn school subjects in a clearer, more interactive way — with an AI teacher that explains concepts, gives examples and helps you practise.
+              </p>
+              <div class="tgen-welcome-actions">
+                <button class="primary-btn tgen-create-profile-btn" type="button">Create my profile <span>→</span></button>
+                <button class="secondary-btn tgen-welcome-back-btn" type="button">Back</button>
+              </div>
+            </div>
+            <div class="tgen-welcome-features">
+              <div class="tgen-feature-card"><div class="tgen-feature-icon">✦</div><div><strong>AI Teacher</strong><p>Ask questions and get clear, step-by-step explanations.</p></div></div>
+              <div class="tgen-feature-card"><div class="tgen-feature-icon">✓</div><div><strong>Practice & Quizzes</strong><p>Test what you know and learn from your mistakes.</p></div></div>
+              <div class="tgen-feature-card"><div class="tgen-feature-icon">▣</div><div><strong>Revision Tools</strong><p>Use flashcards, quick revision and other study tools.</p></div></div>
+              <div class="tgen-feature-card"><div class="tgen-feature-icon">↗</div><div><strong>Track Progress</strong><p>Keep your real study activity and quiz progress in one place.</p></div></div>
+            </div>
+          </div>
+          <div class="tgen-welcome-footer"><span>Built for Nigerian secondary-school students</span><span>SS1 • SS2 • SS3</span></div>
+        </div>
+      </div>`;
+
+    const main = document.querySelector('main');
+    if (main) main.insertBefore(section, main.firstElementChild);
+
+    section.querySelector('.tgen-create-profile-btn').addEventListener('click', () => {
+      if (typeof window.showScreen === 'function') window.showScreen('profile');
+    });
+    section.querySelector('.tgen-welcome-back-btn').addEventListener('click', () => {
+      if (typeof window.showScreen === 'function') window.showScreen('home');
+    });
+  }
+
+  function setupStartLearning() {
+    ensureWelcomeScreen();
+
+    const buttons = Array.from(document.querySelectorAll('button'));
+    buttons.forEach(button => {
+      const text = button.textContent.trim().replace(/\s+/g, ' ');
+      if (!/^Start Learning(?:\s*→)?$/.test(text)) return;
+      if (button.dataset.tgenWelcomeBound === '1') return;
+      button.dataset.tgenWelcomeBound = '1';
+      button.removeAttribute('onclick');
+      button.addEventListener('click', () => {
+        if (typeof window.showScreen !== 'function') return;
+        if (hasProfile()) {
+          window.showScreen('dashboard');
+        } else {
+          ensureWelcomeScreen();
+          window.showScreen('tgenWelcome');
+        }
+      });
+    });
+  }
+
+  function applyGlassCopy() {
+    const profile = document.getElementById('profile');
+    if (!profile) return;
+
+    const title = profile.querySelector('.page-header h1');
+    const desc = profile.querySelector('.page-header p');
+    const eyebrow = profile.querySelector('.page-eyebrow');
+    if (eyebrow) eyebrow.textContent = 'SET UP TGEN-AI';
+    if (title) title.textContent = hasProfile() ? 'Your learning profile' : 'Let’s set up your learning space';
+    if (desc) desc.textContent = 'Tell TGEN-AI what you study so your learning experience feels personal from the start.';
+
+    const subjectHeading = profile.querySelector('#profileSubjects')?.previousElementSibling;
+    if (subjectHeading && subjectHeading.tagName === 'DIV') {
+      const h3 = subjectHeading.querySelector('h3');
+      const p = subjectHeading.querySelector('p');
+      if (h3) h3.textContent = 'Choose your subjects';
+      if (p) p.textContent = 'Pick the subjects you actually offer. Your choices will shape your TGEN-AI experience.';
+    }
+  }
+
+  function bindProfileGlass() {
+    applyGlassCopy();
+    const profile = document.getElementById('profile');
+    if (!profile) return;
+
+    profile.classList.add('tgen-glass-profile');
+
+    ['profileName','profileEmail','profileClass','profileDepartment','profileExam'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('tgen-glass-control');
+    });
+
+    const subjects = document.getElementById('profileSubjects');
+    if (subjects) subjects.classList.add('tgen-glass-subject-grid');
+  }
+
+  function watchDynamicProfile() {
+    bindProfileGlass();
+    const classSelect = document.getElementById('profileClass');
+    const deptSelect = document.getElementById('profileDepartment');
+    [classSelect, deptSelect].forEach(el => {
+      if (!el || el.dataset.tgenGlassBound === '1') return;
+      el.dataset.tgenGlassBound = '1';
+      el.addEventListener('change', () => setTimeout(bindProfileGlass, 50));
+    });
+
+    const subjectGrid = document.getElementById('profileSubjects');
+    if (subjectGrid && subjectGrid.dataset.tgenObserver !== '1') {
+      subjectGrid.dataset.tgenObserver = '1';
+      new MutationObserver(() => {
+        subjectGrid.classList.add('tgen-glass-subject-grid');
+        subjectGrid.querySelectorAll('button, label, .subject-option, .profile-subject-card').forEach(el => el.classList.add('tgen-glass-choice'));
+      }).observe(subjectGrid, {childList:true, subtree:true});
+    }
+  }
+
+  function glassAcademicScreens() {
+    ['classes','subjects','topics'].forEach(id => {
+      const screen = document.getElementById(id);
+      if (screen) screen.classList.add('tgen-glass-academic-screen');
+    });
+    document.querySelectorAll('#subjects .subject-card, #topics .topic-card, #classes .class-card').forEach(card => {
+      card.classList.add('tgen-glass-choice');
+    });
+  }
+
+  function init() {
+    ensureWelcomeScreen();
+    setupStartLearning();
+    watchDynamicProfile();
+    glassAcademicScreens();
+
+    const originalShowScreen = window.showScreen;
+    if (typeof originalShowScreen === 'function' && !originalShowScreen.__tgenWrapped) {
+      function wrappedShowScreen(id) {
+        if (id === 'profile' || id === 'subjects' || id === 'topics' || id === 'classes') {
+          watchDynamicProfile();
+          glassAcademicScreens();
+        }
+        return originalShowScreen.apply(this, arguments);
+      }
+      wrappedShowScreen.__tgenWrapped = true;
+      window.showScreen = wrappedShowScreen;
+    }
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  window.addEventListener('load', () => { init(); setTimeout(init, 300); });
+})();
+/* TGEN-AI — Profile Persistence + Navigation Fix
+   Add this AFTER your existing app.js code.
+   Does not remove existing features.
+*/
+(function () {
+  "use strict";
+
+  const PROFILE_KEY = "tgen-ai-profile";
+
+  function readProfile() {
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      if (!raw) return null;
+      const profile = JSON.parse(raw);
+      return profile && typeof profile === "object" ? profile : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function hydrateProfile() {
+    const saved = readProfile();
+
+    if (saved) {
+      // Keep the existing app's profile state in sync with localStorage.
+      try { userProfile = saved; } catch (error) {}
+      window.userProfile = saved;
+
+      if (saved.className || saved.class) {
+        try { selectedClass = saved.className || saved.class; } catch (error) {}
+      }
+
+      if (saved.department) {
+        try { selectedDepartment = saved.department; } catch (error) {}
+      }
+
+      return saved;
+    }
+
+    window.userProfile = null;
+    return null;
+  }
+
+  // FIX: the old showScreen guard was checking a stale/null in-memory
+  // userProfile even when a saved profile existed in localStorage.
+  const oldShowScreen = window.showScreen;
+
+  if (typeof oldShowScreen === "function") {
+    const fixedShowScreen = function (screenId) {
+      const profile = hydrateProfile();
+
+      // Never send a saved user back to Create Profile.
+      if (profile && screenId === "profile") {
+        // Keep profile accessible as an edit screen if explicitly requested.
+        return oldShowScreen.call(this, screenId);
+      }
+
+      if (profile && screenId !== "home" && screenId !== "profile") {
+        // The original guard now sees the hydrated profile.
+        return oldShowScreen.call(this, screenId);
+      }
+
+      return oldShowScreen.call(this, screenId);
+    };
+
+    fixedShowScreen.__tgenProfileFix = true;
+    window.showScreen = fixedShowScreen;
+  }
+
+  // First-time profile completion should lead directly into AI Tutor.
+  // Existing users keep the normal dashboard Start Learning behaviour.
+  window.startLearning = function () {
+    const profile = hydrateProfile();
+
+    if (!profile) {
+      if (typeof window.ensureOnboarding === "function") {
+        window.ensureOnboarding();
+      } else if (typeof window.showScreen === "function") {
+        window.showScreen("profile");
+      }
+      return;
+    }
+
+    try {
+      selectedClass = profile.className || profile.class || selectedClass;
+      selectedDepartment = profile.department || selectedDepartment;
+      selectedSubject = profile.subjects?.[0] || selectedSubject || null;
+      selectedTopic = null;
+    } catch (error) {}
+
+    if (typeof window.showScreen === "function") {
+      window.showScreen("study");
+    }
+
+    setTimeout(() => {
+      const title = document.getElementById("studyTitle");
+      if (title && profile.subjects?.[0]) {
+        title.textContent = "Ask TGEN-AI";
+      }
+
+      const browse = document.getElementById("showTopicsBtn");
+      if (browse) browse.style.display = "none";
+
+      const backBtn = document.querySelector("#study .back-btn");
+      if (backBtn) backBtn.textContent = "← Back to subjects";
+    }, 0);
+  };
+
+  // Fix the generated navbar too. It now reads the saved profile before
+  // calling showScreen, so navigation cannot bounce back to Profile.
+  function fixNav() {
+    const nav = document.querySelector(".main-nav");
+    if (!nav) return;
+
+    nav.querySelectorAll("[data-tgen-nav]").forEach(button => {
+      if (button.dataset.tgenProfileFixBound === "1") return;
+      button.dataset.tgenProfileFixBound = "1";
+
+      const target = button.dataset.tgenNav;
+      button.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const profile = hydrateProfile();
+
+        if (target !== "home" && !profile) {
+          window.startLearning();
+          return;
+        }
+
+        if (target !== "home") hydrateProfile();
+
+        if (typeof window.showScreen === "function") {
+          window.showScreen(target);
+        }
+      }, true);
+    });
+  }
+
+  function init() {
+    hydrateProfile();
+    fixNav();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  window.addEventListener("load", () => {
+    hydrateProfile();
+    setTimeout(init, 100);
+    setTimeout(init, 500);
+  });
+})();
+
+
+/* =========================================================
+   TGEN-AI — FINAL UI POLISH / FLOW FIX
+   Targeted patch only. Keeps the existing large app and data.
+   ========================================================= */
+(function(){
+  "use strict";
+
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+  function scrollToTutor(){
+    setTimeout(()=>{
+      const input = document.getElementById("questionInput");
+      const study = document.getElementById("study");
+      const target = input || study;
+      if(!target) return;
+      target.scrollIntoView({behavior:"smooth", block:"center"});
+      setTimeout(()=>{ try{ input?.focus(); }catch(e){} }, 450);
+    }, 120);
+  }
+
+  /* 1) Start Learning = straight to the ChatGPT-style tutor.
+        New users still get onboarding first. The Classes page is no longer
+        part of the Start Learning flow. */
+  const originalStartLearning = window.startLearning;
+  window.startLearning = function(){
+    try{
+      if(typeof hydrateProfile === "function") hydrateProfile();
+    }catch(e){}
+    const profile = window.userProfile || (typeof getProfile === "function" ? getProfile() : null);
+    if(!profile){
+      if(typeof ensureOnboarding === "function"){
+        ensureOnboarding();
+        return;
+      }
+      if(typeof window.showScreen === "function") window.showScreen("profile");
+      return;
+    }
+    try{
+      if(profile.className || profile.class) selectedClass = profile.className || profile.class;
+      if(profile.department) selectedDepartment = profile.department;
+      selectedSubject = null;
+      selectedTopic = null;
+    }catch(e){}
+    if(typeof window.showScreen === "function") window.showScreen("study");
+    scrollToTutor();
+  };
+
+  /* Also catch old inline Start Learning buttons that may still call a stale handler. */
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest && e.target.closest("button, a");
+    if(!btn) return;
+    const text = btn.textContent.trim().replace(/\s+/g," ");
+    if(/^Start Learning(?:\s*→)?$/.test(text)){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      window.startLearning();
+    }
+  }, true);
+
+  /* 2) Make the tutor feel much closer to ChatGPT. */
+  const style = document.createElement("style");
+  style.id = "tgen-final-polish-style";
+  style.textContent = `
+    #study .study-content,
+    #study .study-container,
+    #study .chat-container{
+      width:min(900px,100%);
+      margin:0 auto;
+    }
+
+    #chatArea{
+      width:min(820px,100%);
+      margin:0 auto;
+      padding:20px 10px 170px;
+      min-height:420px;
+      scroll-behavior:smooth;
+    }
+
+    #questionInput{
+      width:100% !important;
+      min-height:58px !important;
+      max-height:180px !important;
+      resize:none !important;
+      border:1px solid rgba(0,0,0,.14) !important;
+      border-radius:24px !important;
+      padding:17px 54px 17px 18px !important;
+      font-family:Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+      font-size:16px !important;
+      line-height:1.5 !important;
+      letter-spacing:0 !important;
+      color:#171717 !important;
+      background:#fff !important;
+      outline:none !important;
+      box-shadow:0 1px 2px rgba(0,0,0,.04), 0 8px 30px rgba(0,0,0,.06) !important;
+      transition:border-color .18s ease, box-shadow .18s ease !important;
+    }
+
+    #questionInput:focus{
+      border-color:rgba(46,111,232,.55) !important;
+      box-shadow:0 1px 2px rgba(0,0,0,.04), 0 0 0 3px rgba(46,111,232,.10) !important;
+    }
+
+    #questionInput::placeholder{color:#8b8b8b !important;}
+
+    #study .chat-input-container,
+    #study .input-area,
+    #study .question-input-wrap{
+      width:min(820px,calc(100% - 28px)) !important;
+      margin:0 auto !important;
+    }
+
+    .chat-message{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;}
+    .chat-message.user{background:transparent !important;}
+    .chat-message.ai{background:transparent !important;}
+
+    /* 3) Feature pages: stop the cramped/squashed look. */
+    .tgen-feature-page{
+      width:min(1120px,calc(100% - 32px)) !important;
+      margin:0 auto !important;
+      padding:32px 0 70px !important;
+    }
+    .tgen-feature-page .page-header{
+      display:flex !important;
+      align-items:flex-start !important;
+      justify-content:space-between !important;
+      gap:24px !important;
+      margin-bottom:28px !important;
+    }
+    .tgen-feature-page #notesContent,
+    .tgen-feature-page #examPrepContent,
+    .tgen-feature-page #dailyChallengeContent{
+      width:100% !important;
+    }
+    .tgen-feature-card{
+      width:100% !important;
+      box-sizing:border-box !important;
+      border-radius:24px !important;
+      padding:30px !important;
+      background:#fff !important;
+      border:1px solid rgba(0,0,0,.08) !important;
+      box-shadow:0 12px 40px rgba(0,0,0,.07) !important;
+    }
+
+    /* 4) Notes: proper document/PDF-style upload panel. */
+    .tgen-notes-dropzone{
+      border:2px dashed #cfd6e4;
+      border-radius:22px;
+      padding:42px 24px;
+      text-align:center;
+      background:linear-gradient(180deg,#fafcff,#f5f8fc);
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .tgen-notes-dropzone:hover{border-color:#2e6fe8;transform:translateY(-1px);}
+    .tgen-file-icon{
+      width:68px;height:84px;margin:0 auto 16px;border-radius:10px;
+      background:#fff;border:1px solid #dce2ec;box-shadow:0 8px 20px rgba(0,0,0,.07);
+      display:grid;place-items:center;font-size:32px;position:relative;
+    }
+    .tgen-file-icon:after{content:"PDF";position:absolute;bottom:8px;font-size:10px;font-weight:800;color:#e24d4d;letter-spacing:.08em;}
+    .tgen-notes-file-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid #e1e6ee;border-radius:16px;background:#fff;margin-top:16px;}
+    .tgen-notes-file-row strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .tgen-notes-file-row span{font-size:12px;color:#777;}
+
+    /* 5) Exam Prep: clean dashboard grid instead of one squeezed block. */
+    .tgen-exam-modern{display:grid;gap:22px;}
+    .tgen-exam-hero{padding:26px;border-radius:22px;background:linear-gradient(135deg,#f4f7ff,#ffffff);border:1px solid #dfe5f0;}
+    .tgen-exam-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
+    .tgen-exam-action{min-height:130px;border:1px solid #e1e6ee;border-radius:20px;background:#fff;padding:22px;text-align:left;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.05);}
+    .tgen-exam-action:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.08);}
+    .tgen-exam-action strong{display:block;font-size:17px;margin-bottom:7px;}
+    .tgen-exam-action span{color:#6f7785;line-height:1.45;}
+
+    /* 6) Daily Challenge: make it feel like an actual daily mission. */
+    .tgen-daily-modern{position:relative;overflow:hidden;border-radius:26px;padding:30px;background:linear-gradient(135deg,#101828,#1d2a44);color:#fff;box-shadow:0 18px 50px rgba(16,24,40,.22);}
+    .tgen-daily-modern .page-eyebrow{color:#a9c4ff;}
+    .tgen-daily-modern p{color:#d5dbea;}
+    .tgen-daily-stats{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0;}
+    .tgen-daily-stat{padding:12px 15px;border-radius:14px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);}
+    .tgen-daily-stat strong{display:block;font-size:18px;}
+
+    /* 7) Remove Quick Practice from navigation/feature UI. */
+    [data-tgen-nav="quickPractice"], #quickPractice{display:none !important;}
+
+    /* 8) Quiz size selector. */
+    .tgen-quiz-size-bar{width:min(900px,calc(100% - 28px));margin:0 auto 18px;padding:16px;border:1px solid #e1e6ee;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+    .tgen-quiz-size-options{display:flex;gap:8px;flex-wrap:wrap;}
+    .tgen-quiz-size-options button{border:1px solid #d9deea;background:#fff;border-radius:12px;padding:9px 14px;font-weight:700;cursor:pointer;}
+    .tgen-quiz-size-options button.active{background:#2e6fe8;color:#fff;border-color:#2e6fe8;}
+
+    @media(max-width:700px){
+      .tgen-feature-page{width:min(100% - 20px,1120px) !important;padding-top:20px !important;}
+      .tgen-feature-card{padding:20px !important;border-radius:20px !important;}
+      .tgen-exam-actions{grid-template-columns:1fr;}
+      #chatArea{padding-left:4px;padding-right:4px;}
+    }
+  `;
+  document.head.appendChild(style);
+
+  /* 9) Better Notes renderer. */
+  window.renderNotes = function(){
+    const content=document.getElementById("notesContent");
+    if(!content) return;
+    content.innerHTML=`
+      <div class="tgen-feature-card">
+        <div class="tgen-notes-dropzone" id="tgenNotesDropzone">
+          <div class="tgen-file-icon">📄</div>
+          <h2>Upload a document</h2>
+          <p>Drop a PDF, Word document, text file or image here, or choose a file from your Mac.</p>
+          <button class="primary-btn" type="button" id="tgenNotePick">Choose file</button>
+          <input id="tgenNoteInput" type="file" accept=".pdf,.doc,.docx,.txt,.md,.png,.jpg,.jpeg" hidden>
+        </div>
+        <div id="tgenNoteFileRow"></div>
+        <div id="tgenNoteResult" class="tgen-note-result"></div>
+      </div>`;
+
+    const input=$("#tgenNoteInput",content), pick=$("#tgenNotePick",content), drop=$("#tgenNotesDropzone",content), row=$("#tgenNoteFileRow",content), result=$("#tgenNoteResult",content);
+    let file=null;
+    const showFile=()=>{
+      if(!file){ row.innerHTML=""; return; }
+      const kb=Math.max(1,Math.round(file.size/1024));
+      row.innerHTML=`<div class="tgen-notes-file-row"><div class="tgen-file-icon" style="width:44px;height:54px;font-size:22px;margin:0">📄</div><div style="flex:1;min-width:0"><strong>${String(file.name).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}</strong><span>${kb} KB · ${file.type||"document"}</span></div><button class="primary-btn" id="tgenNoteExplain" type="button">Learn from note →</button></div>`;
+      $("#tgenNoteExplain",row).onclick=explain;
+    };
+    const explain=async()=>{
+      if(!file) return;
+      const btn=$("#tgenNoteExplain",row); if(btn){btn.disabled=true;btn.textContent="Reading…";}
+      result.innerHTML="<div class='tgen-loading'>TGEN-AI is reading your document…</div>";
+      try{
+        const reader=new FileReader();
+        reader.onload=async()=>{
+          try{
+            const response=await fetch("/api/note-study",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({filename:file.name,mimeType:file.type||"application/octet-stream",fileData:String(reader.result).split(",")[1]||"",subject:window.selectedSubject||"",profile:window.userProfile||null})});
+            const data=await response.json();
+            if(!response.ok) throw new Error(data.error||"Could not read note.");
+            result.innerHTML=`<div class="tgen-feature-card" style="margin-top:18px"><span class="page-eyebrow">NOTE SUMMARY</span><h2>${file.name.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}</h2><div class="tgen-note-response">${data.answer||data.response||"Your note was read successfully."}</div></div>`;
+          }catch(err){ result.innerHTML=`<div class='tgen-error'>${String(err.message||err)}</div>`; }
+          if(btn){btn.disabled=false;btn.textContent="Learn from note →";}
+        };
+        reader.readAsDataURL(file);
+      }catch(err){ result.innerHTML=`<div class='tgen-error'>${String(err.message||err)}</div>`; if(btn){btn.disabled=false;btn.textContent="Learn from note →";} }
+    };
+    pick.onclick=()=>input.click();
+    drop.onclick=(e)=>{if(e.target!==pick) input.click();};
+    input.onchange=()=>{file=input.files?.[0]||null;showFile();};
+  };
+
+  /* 10) Better Exam Prep renderer — no Quick Practice. */
+  window.renderExamPrep = function(){
+    const c=document.getElementById("examPrepContent"); if(!c) return;
+    const p=(typeof featureProfile==="function"?featureProfile():window.userProfile)||{};
+    const exam=p.exam||"Your next exam";
+    const subject=window.selectedSubject||p.subjects?.[0]||"your subject";
+    c.innerHTML=`<div class="tgen-exam-modern">
+      <div class="tgen-exam-hero"><span class="page-eyebrow">EXAM PREP</span><h2>${String(exam).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}</h2><p>Build a focused revision session for <strong>${String(subject).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])}</strong>.</p></div>
+      <div class="tgen-exam-actions">
+        <button class="tgen-exam-action" onclick="showScreen('study')"><strong>✦ AI Tutor</strong><span>Ask for explanations, examples and help with difficult topics.</span></button>
+        <button class="tgen-exam-action" onclick="showScreen('quickRevision')"><strong>↻ Quick Revision</strong><span>Review key ideas, definitions, formulas and examples.</span></button>
+        <button class="tgen-exam-action" onclick="showScreen('quiz')"><strong>✓ Quiz</strong><span>Choose 5, 10 or 20 questions and test yourself.</span></button>
+        <button class="tgen-exam-action" onclick="showScreen('flashcards')"><strong>▣ Flashcards</strong><span>Use active recall to remember important concepts.</span></button>
+      </div>
+      <p class="tgen-muted">Generated practice is study material and is not presented as official examination content.</p>
+    </div>`;
+  };
+
+  /* 11) Better Daily Challenge. */
+  window.renderDaily = function(){
+    const c=document.getElementById("dailyChallengeContent"); if(!c) return;
+    const today=new Date().toISOString().slice(0,10);
+    const done=localStorage.getItem(`tgen-daily:${today}`)==="1";
+    const p=(typeof featureProfile==="function"?featureProfile():window.userProfile)||{};
+    const subject=window.selectedSubject||p.subjects?.[0]||"General Mathematics";
+    c.innerHTML=`<div class="tgen-daily-modern">
+      <span class="page-eyebrow">TODAY'S MISSION</span>
+      <h2 style="font-size:clamp(28px,4vw,42px);margin:8px 0">${done?"Challenge complete. Nice work.":"Your daily challenge is ready."}</h2>
+      <p>Take a short ${subject.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c])} quiz and keep your learning streak moving.</p>
+      <div class="tgen-daily-stats"><div class="tgen-daily-stat"><strong>5</strong><span>questions</span></div><div class="tgen-daily-stat"><strong>1</strong><span>daily mission</span></div><div class="tgen-daily-stat"><strong>${done?"✓":"—"}</strong><span>${done?"completed":"not completed"}</span></div></div>
+      <button class="primary-btn" ${done?"disabled":""} onclick="localStorage.setItem('tgen-daily-pending','${today}'); showScreen('quiz');">${done?"Completed today":"Start today's challenge →"}</button>
+    </div>`;
+  };
+
+  /* 12) Remove Quick Practice everywhere. Keep the old screen hidden so old
+        references cannot break the app. */
+  function removeQuickPractice(){
+    document.querySelectorAll('[data-tgen-nav="quickPractice"]').forEach(x=>x.remove());
+    const qp=document.getElementById("quickPractice"); if(qp) qp.remove();
+  }
+
+  /* 13) Put question count selection directly inside Quiz. */
+  let quizSize = Number(localStorage.getItem("tgen-quiz-size")||5);
+  if(![5,10,20].includes(quizSize)) quizSize=5;
+
+  function quizSizeBar(){
+    const list=document.getElementById("quizList"); if(!list) return;
+    const old=document.getElementById("tgenQuizSizeBar"); if(old) old.remove();
+    const bar=document.createElement("div");
+    bar.id="tgenQuizSizeBar"; bar.className="tgen-quiz-size-bar";
+    bar.innerHTML=`<div><strong>Quiz length</strong><div class="tgen-muted" style="font-size:12px">Choose how many questions you want.</div></div><div class="tgen-quiz-size-options"><button type="button" data-size="5">5</button><button type="button" data-size="10">10</button><button type="button" data-size="20">20</button></div>`;
+    list.parentNode.insertBefore(bar,list);
+    bar.querySelectorAll("[data-size]").forEach(b=>{
+      const n=Number(b.dataset.size); if(n===quizSize)b.classList.add("active");
+      b.onclick=()=>{quizSize=n;localStorage.setItem("tgen-quiz-size",String(n));quizSizeBar();};
+    });
+  }
+
+  function renderSizedQuiz(){
+    const list=document.getElementById("quizList"); if(!list || !Array.isArray(window.quizQuestions)) return;
+    const questions=window.quizQuestions.slice(0,quizSize);
+    window.quizQuestions=questions;
+    window.quizAnswers={};
+    list.innerHTML=questions.map((q,index)=>`<div class="quiz-item" id="tgen-quiz-${index}"><p class="quiz-question-text"><strong>${index+1}.</strong> ${typeof escapeHTML==="function"?escapeHTML(q.question):q.question}</p><div class="quiz-options">${(q.options||[]).map(option=>`<label class="quiz-option"><input type="radio" name="tgen-quiz-${index}" value="${typeof escapeAttribute==="function"?escapeAttribute(option):option}"><span>${typeof escapeHTML==="function"?escapeHTML(option):option}</span></label>`).join("")}</div></div>`).join("");
+    const counter=document.getElementById("questionCounter"); if(counter)counter.textContent=`0 of ${questions.length} answered`;
+    list.querySelectorAll('input[type="radio"]').forEach(i=>i.addEventListener("change",window.updateQuizProgress));
+    const submit=document.getElementById("submitQuizBtn"); if(submit)submit.style.display="none";
+    quizSizeBar();
+  }
+
+  const oldGenerateQuiz=window.generateQuiz;
+  window.generateQuiz=function(){
+    const first=quizSize;
+    if(typeof oldGenerateQuiz!=="function") return;
+    oldGenerateQuiz();
+    setTimeout(()=>{
+      let combined=Array.isArray(window.quizQuestions)?window.quizQuestions.slice():[];
+      if(first>10){
+        oldGenerateQuiz();
+        const second=Array.isArray(window.quizQuestions)?window.quizQuestions.slice():[];
+        combined=combined.concat(second);
+      }
+      const unique=[]; const seen=new Set();
+      combined.forEach(q=>{const key=String(q.question||"");if(!seen.has(key)){seen.add(key);unique.push(q);}});
+      window.quizQuestions=unique.slice(0,first);
+      renderSizedQuiz();
+    },80);
+  };
+
+  /* 14) Final showScreen wrapper: tutor scroll + feature rendering. */
+  const oldShow=window.showScreen;
+  window.showScreen=function(screenId){
+    if(screenId==="quickPractice") return window.showScreen("quiz");
+    const result=oldShow ? oldShow.apply(this,arguments) : undefined;
+    if(screenId==="study") scrollToTutor();
+    if(screenId==="notes") window.renderNotes();
+    if(screenId==="examPrep") window.renderExamPrep();
+    if(screenId==="dailyChallenge") window.renderDaily();
+    if(screenId==="quiz") setTimeout(quizSizeBar,120);
+    setTimeout(removeQuickPractice,50);
+    return result;
+  };
+
+  function init(){
+    removeQuickPractice();
+    setTimeout(removeQuickPractice,250);
+    setTimeout(removeQuickPractice,700);
+    if(document.getElementById("quizList")) quizSizeBar();
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init,{once:true}); else init();
+  window.addEventListener("load",()=>{init();setTimeout(init,400);});
+
+  console.log("TGEN-AI: final UI polish patch loaded");
+})();
+/* =========================================================
+   TGEN-AI — FINAL REQUESTED FIXES
+   Paste this at the very bottom of app.js.
+   ========================================================= */
+(function () {
+  "use strict";
+
+  function esc(v) {
+    return typeof escapeHTML === "function"
+      ? escapeHTML(v)
+      : String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  function getProfile() {
+    try { return JSON.parse(localStorage.getItem("tgen-ai-profile") || "null"); }
+    catch (e) { return null; }
+  }
+
+  /* 1) Remove "Classes" and "Quick Practice" from every nav, permanently */
+  function scrubNav() {
+    document.querySelectorAll(".main-nav button, .footer-links button, .tgen-more-menu button, [data-tgen-nav]").forEach(btn => {
+      const t = btn.textContent.trim().toLowerCase();
+      if (t === "classes" || t === "quick practice") btn.remove();
+    });
+    document.querySelectorAll('[data-tgen-nav="classes"], [data-tgen-nav="quickPractice"]').forEach(b => b.remove());
+    const qp = document.getElementById("quickPractice");
+    if (qp) qp.remove();
+  }
+
+  /* 2) Never show "Create Profile" once a profile already exists */
+  const prevShowScreen = window.showScreen;
+  window.showScreen = function (screenId) {
+    const profile = getProfile();
+    if (profile) { try { window.userProfile = profile; userProfile = profile; } catch (e) {} }
+    if (screenId === "profile" && profile) screenId = "study";
+    if (screenId === "quickPractice") screenId = "quiz";
+
+    const result = typeof prevShowScreen === "function" ? prevShowScreen(screenId) : undefined;
+
+    scrubNav();
+    if (screenId === "study") scrollToChat();
+    if (screenId === "notes") renderCleanNotes();
+    if (screenId === "examPrep") renderCleanExamPrep();
+    if (screenId === "dailyChallenge") renderCleanDaily();
+    if (screenId === "quiz") setTimeout(insertQuizSizeBar, 80);
+    return result;
+  };
+
+  /* 3) Start Learning -> straight into the chat, ChatGPT-style */
+  function scrollToChat() {
+    setTimeout(() => {
+      const input = document.getElementById("questionInput");
+      const wrapper = document.querySelector("#study .chat-wrapper") || document.getElementById("study");
+      (input || wrapper)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => { try { input && input.focus(); } catch (e) {} }, 350);
+    }, 60);
+  }
+
+  window.startLearning = function () {
+    const profile = getProfile();
+    if (!profile) { window.showScreen("profile"); return; }
+    try {
+      selectedClass = profile.className || profile.class || selectedClass;
+      selectedDepartment = profile.department || selectedDepartment;
+      if (!selectedSubject) selectedSubject = profile.subjects?.[0] || null;
+      selectedTopic = null;
+    } catch (e) {}
+    window.showScreen("study");
+  };
+
+  // Beats the hero button's inline onclick="showScreen('classes')"
+  document.addEventListener("click", function (e) {
+    const btn = e.target.closest && e.target.closest("button,a");
+    if (!btn) return;
+    const text = btn.textContent.replace(/\s+/g, " ").trim();
+    if (/^Start Learning(\s*→)?$/i.test(text)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      window.startLearning();
+    }
+  }, true);
+
+  /* 4) ChatGPT-style chat font/spacing */
+  const chatStyle = document.createElement("style");
+  chatStyle.textContent = `
+    #chatArea, #questionInput, .chat-message, .message-content {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+    }
+    #chatArea { padding: 24px 6px 150px !important; }
+    #questionInput { font-size: 15px !important; line-height: 1.5 !important; border-radius: 22px !important; padding: 15px 18px !important; }
+    .chat-message.user-message, .chat-message.student { justify-content: flex-end; }
+    .chat-message .message-content { border-radius: 18px !important; padding: 12px 16px !important; line-height: 1.6 !important; }
+  `;
+  document.head.appendChild(chatStyle);
+
+  /* 5) Notes: real upload box, not a stacked line */
+  function renderCleanNotes() {
+    const content = document.getElementById("notesContent");
+    if (!content) return;
+    content.innerHTML = `
+      <div class="tgen-notes-card">
+        <div class="tgen-notes-dropzone" id="tgenCleanDrop">
+          <div class="tgen-notes-icon">📄</div>
+          <h2>Upload a document</h2>
+          <p>Drop a PDF, Word document, text file or image, or choose one from your device.</p>
+          <div class="tgen-notes-actions">
+            <input id="tgenCleanFile" type="file" accept=".pdf,.doc,.docx,.txt,.md,.png,.jpg,.jpeg" hidden>
+            <button class="tgen-notes-upload" type="button" id="tgenCleanChoose">Choose file</button>
+            <button class="tgen-notes-explain" type="button" id="tgenCleanExplain" disabled>Explain my note →</button>
+          </div>
+          <div class="tgen-notes-file" id="tgenCleanFileName">No file selected.</div>
+          <div class="tgen-notes-status" id="tgenCleanStatus"></div>
+        </div>
+        <div class="tgen-notes-result" id="tgenCleanResult">
+          <h3>Lesson from your note</h3>
+          <div class="tgen-notes-result-body" id="tgenCleanResultBody"></div>
+        </div>
+      </div>`;
+
+    const input = content.querySelector("#tgenCleanFile"), pick = content.querySelector("#tgenCleanChoose"),
+      explainBtn = content.querySelector("#tgenCleanExplain"), name = content.querySelector("#tgenCleanFileName"),
+      status = content.querySelector("#tgenCleanStatus"), drop = content.querySelector("#tgenCleanDrop"),
+      result = content.querySelector("#tgenCleanResult"), body = content.querySelector("#tgenCleanResultBody");
+    let file = null;
+
+    pick.onclick = () => input.click();
+    drop.onclick = (e) => { if (e.target === pick || e.target === explainBtn) return; input.click(); };
+    input.onchange = () => {
+      file = input.files?.[0] || null;
+      name.textContent = file ? file.name : "No file selected.";
+      explainBtn.disabled = !file;
+      drop.classList.toggle("has-file", !!file);
+    };
+
+    explainBtn.onclick = async () => {
+      if (!file) return;
+      explainBtn.disabled = true;
+      status.textContent = "Reading your note...";
+      result.classList.remove("active");
+      try {
+        const base64 = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => { const s = String(r.result || ""); const i = s.indexOf(","); res(i >= 0 ? s.slice(i + 1) : s); };
+          r.onerror = rej;
+          r.readAsDataURL(file);
+        });
+        const response = await fetch("/api/note-study", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename: file.name, mimeType: file.type || "application/octet-stream", fileData: base64, subject: window.selectedSubject || "", profile: getProfile() })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "Could not read the note.");
+        body.innerHTML = esc(data.answer || "Note read successfully.").replace(/\n/g, "<br>");
+        result.classList.add("active");
+        status.textContent = "Ready — read the lesson below.";
+      } catch (err) {
+        status.textContent = err.message || "Could not read the note.";
+      } finally {
+        explainBtn.disabled = !file;
+      }
+    };
+  }
+
+  /* 6) Exam Prep: proper dashboard grid, not squashed */
+  function renderCleanExamPrep() {
+    const c = document.getElementById("examPrepContent");
+    if (!c) return;
+    const p = getProfile() || {};
+    const exam = p.exam || "Your next exam";
+    const subject = window.selectedSubject || p.subjects?.[0] || "your subject";
+    c.innerHTML = `
+      <div class="tgen-exam-modern">
+        <div class="tgen-exam-hero">
+          <span class="page-eyebrow">EXAM PREP</span>
+          <h2>${esc(exam)}</h2>
+          <p>Build a focused revision session for <strong>${esc(subject)}</strong>.</p>
+        </div>
+        <div class="tgen-exam-actions">
+          <button class="tgen-exam-action" onclick="showScreen('study')"><strong>✦ AI Tutor</strong><span>Ask for explanations and worked examples.</span></button>
+          <button class="tgen-exam-action" onclick="showScreen('quickRevision')"><strong>↻ Quick Revision</strong><span>Review key ideas, definitions and formulas.</span></button>
+          <button class="tgen-exam-action" onclick="showScreen('quiz')"><strong>✓ Quiz</strong><span>Choose 5, 10 or 20 questions and test yourself.</span></button>
+          <button class="tgen-exam-action" onclick="showScreen('flashcards')"><strong>▣ Flashcards</strong><span>Use active recall to remember key concepts.</span></button>
+        </div>
+      </div>`;
+  }
+
+  /* 7) Daily Challenge: proper card */
+  function renderCleanDaily() {
+    const c = document.getElementById("dailyChallengeContent");
+    if (!c) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const done = localStorage.getItem(`tgen-daily:${today}`) === "1";
+    const p = getProfile() || {};
+    const subject = window.selectedSubject || p.subjects?.[0] || "General Mathematics";
+    c.innerHTML = `
+      <div class="tgen-daily-modern">
+        <span class="page-eyebrow">TODAY'S MISSION</span>
+        <h2>${done ? "Challenge complete. Nice work." : "Your daily challenge is ready."}</h2>
+        <p>Take a short ${esc(subject)} quiz and keep your streak going.</p>
+        <div class="tgen-daily-stats">
+          <div class="tgen-daily-stat"><strong>5</strong><span>questions</span></div>
+          <div class="tgen-daily-stat"><strong>${done ? "✓" : "—"}</strong><span>${done ? "completed" : "not completed"}</span></div>
+        </div>
+        <button class="primary-btn" ${done ? "disabled" : ""} onclick="localStorage.setItem('tgen-daily-pending','${today}'); showScreen('quiz');">
+          ${done ? "Completed today" : "Start today's challenge →"}
+        </button>
+      </div>`;
+  }
+
+  /* 8) Quiz: pick 5 / 10 / 20 questions */
+  let quizSize = Number(localStorage.getItem("tgen-quiz-size") || 10);
+  if (![5, 10, 20].includes(quizSize)) quizSize = 10;
+
+  function insertQuizSizeBar() {
+    const list = document.getElementById("quizList");
+    if (!list) return;
+    let bar = document.getElementById("tgenQuizSizeBar");
+    if (!bar) {
+      bar = document.createElement("div");
+      bar.id = "tgenQuizSizeBar";
+      bar.style.cssText = "display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 16px;margin-bottom:16px;border:1px solid #e5e7eb;border-radius:14px;background:#fff;";
+      list.parentNode.insertBefore(bar, list);
+    }
+    bar.innerHTML = `<strong style="font-size:13px;">Quiz length</strong>
+      <div style="display:flex;gap:8px;">
+        ${[5, 10, 20].map(n => `<button type="button" data-size="${n}" style="border:1px solid #d9deea;background:${n === quizSize ? "#2563eb" : "#fff"};color:${n === quizSize ? "#fff" : "#1f2937"};border-radius:10px;padding:8px 14px;font-weight:700;cursor:pointer;">${n}</button>`).join("")}
+      </div>`;
+    bar.querySelectorAll("[data-size]").forEach(b => {
+      b.onclick = () => {
+        quizSize = Number(b.dataset.size);
+        localStorage.setItem("tgen-quiz-size", String(quizSize));
+        insertQuizSizeBar();
+      };
+    });
+  }
+
+  const prevGenerateQuiz = window.generateQuiz;
+  window.generateQuiz = function () {
+    const result = typeof prevGenerateQuiz === "function" ? prevGenerateQuiz.apply(this, arguments) : undefined;
+    setTimeout(() => {
+      if (Array.isArray(window.quizQuestions) && window.quizQuestions.length > quizSize) {
+        window.quizQuestions = window.quizQuestions.slice(0, quizSize);
+        const list = document.getElementById("quizList");
+        if (list) {
+          list.querySelectorAll(".quiz-item").forEach((item, i) => { if (i >= quizSize) item.remove(); });
+          const counter = document.getElementById("questionCounter");
+          if (counter) counter.textContent = `0 of ${quizSize} answered`;
+        }
+      }
+      insertQuizSizeBar();
+    }, 60);
+    return result;
+  };
+
+  /* Boot + keep enforcing, since older patches sometimes re-render on their own */
+  function boot() { scrubNav(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+  window.addEventListener("load", boot);
+  setInterval(scrubNav, 1000);
+
+  console.log("TGEN-AI: final requested fixes applied.");
+})();
+/* =========================================================
+   TGEN-AI — NAV / SCROLL / WELCOME-SCREEN / FULL-WIDTH FIX
+   Paste at the very bottom of app.js.
+   ========================================================= */
+(function () {
+  "use strict";
+
+  const PROFILE_KEY = "tgen-ai-profile";
+
+  function readProfile() {
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      if (!raw) return null;
+      const p = JSON.parse(raw);
+      return p && typeof p === "object" ? p : null;
+    } catch (e) { return null; }
+  }
+
+  function hydrate() {
+    const p = readProfile();
+    if (p) {
+      try { userProfile = p; } catch (e) {}
+      window.userProfile = p;
+      try {
+        selectedClass = p.className || p.class || selectedClass;
+        selectedDepartment = p.department || selectedDepartment;
+        if (!selectedSubject) selectedSubject = (p.subjects && p.subjects[0]) || null;
+      } catch (e) {}
+    } else {
+      window.userProfile = null;
+    }
+    return p;
+  }
+
+  // Once a profile exists, the welcome/onboarding screen is deleted from the
+  // page entirely — nothing can display it again, no matter what calls it.
+  function killWelcomeScreen() {
+    const w = document.getElementById("tgenWelcome");
+    if (w) w.remove();
+  }
+
+  const prevShow = window.showScreen;
+  window.showScreen = function (screenId) {
+    const profile = hydrate();
+    if (profile) {
+      killWelcomeScreen();
+      if (screenId === "tgenWelcome" || screenId === "profile") screenId = "study";
+    }
+    const result = typeof prevShow === "function" ? prevShow(screenId) : undefined;
+    if (screenId === "study") scrollChatToBottom();
+    return result;
+  };
+
+  // Scroll to the LATEST message / input box, never to the top of history.
+  function scrollChatToBottom() {
+    setTimeout(() => {
+      const chatArea = document.getElementById("chatArea");
+      if (chatArea) chatArea.scrollTop = chatArea.scrollHeight;
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "auto" });
+      const input = document.getElementById("questionInput");
+      setTimeout(() => { try { input && input.focus({ preventScroll: true }); } catch (e) {} }, 60);
+    }, 30);
+  }
+
+  // Make each nav label do exactly what it says, no matter what old inline
+  // onclick handlers or wrappers try to do instead.
+  const NAV_MAP = { "home": "home", "ai tutor": "study", "notes": "notes", "quiz": "quiz", "progress": "progress" };
+
+  function bindNav() {
+    document.querySelectorAll(".main-nav button, .footer-links button, .tgen-more-menu button").forEach(btn => {
+      const label = btn.textContent.trim().toLowerCase();
+      const target = NAV_MAP[label];
+      if (!target || btn.dataset.tgenFinalNav === "1") return;
+      btn.dataset.tgenFinalNav = "1";
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        window.showScreen(target);
+      }, true);
+    });
+  }
+
+  function boot() {
+    hydrate();
+    if (window.userProfile) killWelcomeScreen();
+    bindNav();
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+  window.addEventListener("load", boot);
+  setInterval(boot, 1000); // keeps re-asserting in case another patch re-renders the nav
+
+  // AI Tutor fills the window instead of sitting in a narrow centered column.
+  const style = document.createElement("style");
+  style.textContent = `
+    #study, .study-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+      box-sizing: border-box !important;
+    }
+    .chat-wrapper { width: 100% !important; border-radius: 0 !important; }
+    #chatArea { max-height: none !important; min-height: calc(100vh - 320px) !important; }
+  `;
+  document.head.appendChild(style);
+
+  console.log("TGEN-AI: nav/scroll/welcome/full-width fix loaded.");
+})();
+/* =========================================================
+   TGEN-AI — CHATGPT-STYLE FULL-WIDTH TUTOR LAYOUT
+   Paste at the very bottom of app.js.
+   ========================================================= */
+(function () {
+  const style = document.createElement("style");
+  style.textContent = `
+    /* Kill the boxed "card" look — no border, no shadow, no rounded corners */
+    #study .study-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      min-height: calc(100vh - 76px) !important;
+    }
+
+    #study .study-header {
+      width: 100% !important;
+      max-width: 900px !important;
+      margin: 0 auto !important;
+      padding: 20px 24px 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    .chat-wrapper {
+      flex: 1 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+
+    .chat-topbar { display: none !important; }
+
+    #chatArea {
+      flex: 1 !important;
+      width: 100% !important;
+      max-width: 900px !important;
+      margin: 0 auto !important;
+      max-height: none !important;
+      min-height: 0 !important;
+      padding: 24px 24px 180px !important;
+      box-sizing: border-box !important;
+    }
+
+    .empty-chat {
+      min-height: 60vh !important;
+      justify-content: center !important;
+    }
+
+    .chat-message { max-width: 100% !important; }
+    .chat-message .message-content,
+    .chat-message .message-bubble {
+      max-width: 90% !important;
+      font-size: 15px !important;
+      line-height: 1.65 !important;
+    }
+
+    /* Input bar: fixed to bottom, full width, ChatGPT style */
+    .chat-input-area {
+      position: sticky !important;
+      bottom: 0 !important;
+      width: 100% !important;
+      max-width: 900px !important;
+      margin: 0 auto !important;
+      background: #fff !important;
+      border-top: none !important;
+      padding: 14px 24px 22px !important;
+      box-sizing: border-box !important;
+    }
+
+    #questionInput {
+      width: 100% !important;
+      border-radius: 26px !important;
+      padding: 16px 20px !important;
+      font-size: 15px !important;
+      box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 6px 20px rgba(0,0,0,.06) !important;
+    }
+
+    .study-quick-actions {
+      display: none !important; /* ChatGPT doesn't show these under the box */
+    }
+
+    @media (max-width: 760px) {
+      #study .study-header, #chatArea, .chat-input-area {
+        max-width: 100% !important;
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  console.log("TGEN-AI: ChatGPT-style full-width tutor layout applied.");
+})();
+/* =========================================================
+   TGEN-AI — REMOVE TOP AI TUTOR HEADER
+   Paste at the very bottom of app.js.
+   ========================================================= */
+(function () {
+  const style = document.createElement("style");
+  style.textContent = `
+    #study .study-header,
+    #tgenUiFlowIntro,
+    .tgen-ui-flow-intro,
+    #tgenUniversalIntro {
+      display: none !important;
+    }
+
+    /* Reclaim the space it used to take */
+    #study .study-container {
+      padding-top: 0 !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  console.log("TGEN-AI: top AI Tutor header removed.");
+})();

@@ -1,0 +1,1 @@
+Replace your current app.js with this app.js. It removes the large TGEN-AI welcome/intro screen and keeps the existing curriculum, subjects, topics, quizzes and AI Tutor. New users go to profile; returning users go straight to AI Tutor. Then hard refresh with Cmd+Shift+R.

@@ -35,7 +35,18 @@ function studentContext(profile = {}) {
 app.post("/api/chat", async (req, res) => {
   try {
     const { message, subject, topic, profile, history } = req.body;
+const developerQuestion =
+  /\b(who|what)\b.*\b(developer|creator|created|made|built|owner|author)\b/i.test(message || "") ||
+  /\b(developer|creator|owner|author)\b.*\b(you|tgen|ai|this)\b/i.test(message || "") ||
+  /\b(who\s+(made|created|built|developed)\s+(you|tgen|this))\b/i.test(message || "") ||
+  /\b(who\s+is\s+(your|the)\s+(developer|creator|owner))\b/i.test(message || "");
 
+if (developerQuestion) {
+  return res.json({
+    answer:
+      "The person who developed and made me is Tamilore Olukoya, brother of sheddypoppi."
+  });
+}
     if (!message || !message.trim()) {
       return res.status(400).json({ error: "Please enter a question." });
     }
