@@ -18258,3 +18258,114 @@ if (
 
   console.log("TGEN-AI: top AI Tutor header removed.");
 })();
+/* =========================================================
+   TGEN-AI ASSIGNMENT SCANNER
+   ========================================================= */
+
+(function () {
+  "use strict";
+
+  // Create hidden file input
+  const assignmentInput = document.createElement("input");
+  assignmentInput.type = "file";
+  assignmentInput.accept = "image/*";
+  assignmentInput.capture = "environment";
+  assignmentInput.style.display = "none";
+  assignmentInput.id = "tgenAssignmentInput";
+
+  document.body.appendChild(assignmentInput);
+
+  // Create plus button
+  const plusButton = document.createElement("button");
+
+  plusButton.type = "button";
+  plusButton.id = "tgenAssignmentPlus";
+  plusButton.innerHTML = "＋";
+  plusButton.title = "Scan assignment";
+
+  plusButton.style.cssText = `
+    position: fixed;
+    right: 24px;
+    bottom: 90px;
+    width: 54px;
+    height: 54px;
+    border: none;
+    border-radius: 50%;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 8px 25px rgba(0,0,0,.18);
+  `;
+
+  document.body.appendChild(plusButton);
+
+  plusButton.addEventListener("click", function () {
+    assignmentInput.click();
+  });
+
+  assignmentInput.addEventListener("change", async function () {
+    const file = assignmentInput.files?.[0];
+
+    if (!file) return;
+
+    // Show loading message
+    if (typeof window.renderChatMessage === "function") {
+      window.renderChatMessage(
+        "📷 I'm reading your assignment...",
+        "ai"
+      );
+    }
+
+    try {
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+
+        reader.readAsDataURL(file);
+      });
+
+      const response = await fetch("/api/assignment-scan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          filename: file.name,
+          mimeType: file.type,
+          fileData: base64
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error || "Could not scan assignment."
+        );
+      }
+
+      if (typeof window.renderChatMessage === "function") {
+        window.renderChatMessage(
+          data.answer,
+          "ai"
+        );
+      }
+
+    } catch (error) {
+      console.error("Assignment scanner error:", error);
+
+      if (typeof window.renderChatMessage === "function") {
+        window.renderChatMessage(
+          "I couldn't read that assignment. Try taking a clearer picture and scan it again.",
+          "ai"
+        );
+      }
+    }
+
+    assignmentInput.value = "";
+  });
+
+})();

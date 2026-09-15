@@ -176,7 +176,78 @@ If the note has no clear sections, divide it into logical learning parts yoursel
     });
   }
 });
+app.post("/api/assignment-scan", async (req, res) => {
+  try {
+    const {
+      filename,
+      mimeType,
+      fileData
+    } = req.body;
 
+    if (!fileData) {
+      return res.status(400).json({
+        error: "No assignment image was provided."
+      });
+    }
+
+    const cleanBase64 = String(fileData)
+      .replace(/^data:[^;]+;base64,/, "");
+
+    const response = await openai.responses.create({
+      model: "gpt-5.6-luna",
+
+      instructions: `
+You are TGEN-AI, an AI tutor for secondary-school students.
+
+The student has uploaded a photo of an assignment.
+
+Read the assignment carefully.
+
+For every question you can clearly read:
+1. Give the answer.
+2. Give a short, clear explanation showing how to get the answer.
+3. Keep the answers numbered so they match the assignment.
+4. If a question is unclear or unreadable, say that instead of guessing.
+5. Never claim something is an official past question unless it is verified.
+6. Do not use Markdown asterisks such as * or **.
+7. Use simple, student-friendly language.
+
+Do not pretend to know text that cannot be read from the image.
+`,
+
+      input: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "input_text",
+              text: `
+Scan this assignment and solve the questions.
+Filename: ${filename || "assignment"}
+              `
+            },
+            {
+              type: "input_image",
+              image_url: `data:${mimeType || "image/jpeg"};base64,${cleanBase64}`,
+              detail: "high"
+            }
+          ]
+        }
+      ]
+    });
+
+    res.json({
+      answer: response.output_text
+    });
+
+  } catch (error) {
+    console.error("Assignment scan error:", error);
+
+    res.status(500).json({
+      error: "TGEN-AI could not read the assignment."
+    });
+  }
+});
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 TGEN-AI API server running on port ${PORT}`);
 });
