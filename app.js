@@ -18369,3 +18369,123 @@ if (
   });
 
 })();
+/* =========================================================
+   TGEN-AI — YEAR 1 TO YEAR 12
+   Paste at the VERY BOTTOM of app.js
+   ========================================================= */
+
+(function () {
+  "use strict";
+
+  const yearNames = {
+    SS1: "Year 10",
+    SS2: "Year 11",
+    SS3: "Year 12",
+    JSS1: "Year 7",
+    JSS2: "Year 8",
+    JSS3: "Year 9"
+  };
+
+  /* ---------- RENAME EXISTING CLASS LABELS ---------- */
+
+  function renameClassLabels() {
+    document.querySelectorAll("button, a, option, label, span, div").forEach(el => {
+      const text = el.textContent.trim();
+
+      if (yearNames[text]) {
+        el.textContent = yearNames[text];
+      }
+    });
+  }
+
+  /* ---------- ADD YEAR 1–6 IF CLASS DATA EXISTS ---------- */
+
+  function addMissingYears() {
+    if (typeof classData === "undefined") return;
+
+    const source =
+      classData.JSS1 ||
+      classData.SS1;
+
+    if (!source) return;
+
+    for (let i = 1; i <= 6; i++) {
+      const key = `YEAR${i}`;
+
+      if (!classData[key]) {
+        classData[key] = {
+          ...source,
+          name: `Year ${i}`,
+          badge: `Year ${i}`,
+          icon: "📚",
+          subjects: Array.isArray(source.subjects)
+            ? source.subjects.map(subject => ({ ...subject }))
+            : []
+        };
+      }
+    }
+
+    /* Existing JSS levels become Year 7–9 */
+    if (classData.JSS1) {
+      classData.JSS1.name = "Year 7";
+      classData.JSS1.badge = "Year 7";
+    }
+
+    if (classData.JSS2) {
+      classData.JSS2.name = "Year 8";
+      classData.JSS2.badge = "Year 8";
+    }
+
+    if (classData.JSS3) {
+      classData.JSS3.name = "Year 9";
+      classData.JSS3.badge = "Year 9";
+    }
+
+    /* Existing senior levels become Year 10–12 */
+    if (classData.SS1) {
+      classData.SS1.name = "Year 10";
+      classData.SS1.badge = "Year 10";
+    }
+
+    if (classData.SS2) {
+      classData.SS2.name = "Year 11";
+      classData.SS2.badge = "Year 11";
+    }
+
+    if (classData.SS3) {
+      classData.SS3.name = "Year 12";
+      classData.SS3.badge = "Year 12";
+    }
+  }
+
+  /* ---------- FORCE VISIBLE TEXT TO YEAR FORMAT ---------- */
+
+  function applyYearLabels() {
+    document.querySelectorAll("button, a, option, label, span, div").forEach(el => {
+      const text = el.textContent.trim();
+
+      if (text === "SS1") el.textContent = "Year 10";
+      if (text === "SS2") el.textContent = "Year 11";
+      if (text === "SS3") el.textContent = "Year 12";
+
+      if (text === "JSS1") el.textContent = "Year 7";
+      if (text === "JSS2") el.textContent = "Year 8";
+      if (text === "JSS3") el.textContent = "Year 9";
+    });
+  }
+
+  addMissingYears();
+  renameClassLabels();
+  applyYearLabels();
+
+  /* Re-apply after TGEN-AI changes screens */
+  const yearObserver = new MutationObserver(() => {
+    applyYearLabels();
+  });
+
+  yearObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+})();
