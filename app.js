@@ -1548,7 +1548,6 @@ function renderChatMessage(
   message,
   sender = "ai"
 ) {
-
   const chatArea =
     document.getElementById("chatArea");
 
@@ -1561,6 +1560,17 @@ function renderChatMessage(
 
   if (empty) {
     empty.remove();
+  }
+
+  // Remove Markdown asterisks from AI responses
+  let cleanMessage = String(message ?? "");
+
+  if (sender !== "user") {
+    cleanMessage = cleanMessage
+      .replace(/\*\*(.*?)\*\*/g, "$1")
+      .replace(/(^|\s)\*([^*\n]+)\*(?=\s|[.,!?;:]|$)/g, "$1$2")
+      .replace(/^\s*\*\s+/gm, "• ")
+      .replace(/\*/g, "");
   }
 
   const wrapper =
@@ -1580,7 +1590,7 @@ function renderChatMessage(
     </div>
 
     <div class="message-content">
-      ${message}
+      ${cleanMessage}
     </div>
 
   `;
